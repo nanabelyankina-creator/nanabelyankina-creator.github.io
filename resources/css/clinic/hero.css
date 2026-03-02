@@ -1,0 +1,139 @@
+.clinic-hero {
+  background: var(--clinic-white);
+  position: relative;
+  overflow: hidden;
+}
+
+.clinic-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.clinic-hero-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 0 3rem;
+  position: relative;
+}
+
+.clinic-hero-content {
+  width: 100%;
+  text-align: center;
+}
+
+.clinic-hero h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--clinic-dark);
+  margin: 0 0 1.5rem;
+  line-height: 1.2;
+}
+
+.clinic-hero-image {
+  display: none;
+}
+
+.clinic-search {
+  background-color: var(--clinic-gray-bg);
+  border-radius: var(--clinic-radius);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 100%;
+}
+
+.clinic-search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.clinic-search-form select,
+.clinic-search-form input[type="text"] {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--clinic-gray-border);
+  border-radius: var(--clinic-radius);
+  font-size: 1rem;
+  background: var(--clinic-white);
+}
+
+.clinic-search-form select:focus,
+.clinic-search-form input[type="text"]:focus {
+  outline: none;
+  border-color: var(--clinic-primary);
+}
+
+.clinic-search-btn {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--clinic-primary);
+  color: var(--clinic-white);
+  border: none;
+  border-radius: var(--clinic-radius);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.clinic-search-btn:hover {
+  background-color: var(--clinic-primary-dark);
+}
+
+@media (min-width: 768px) {
+  .clinic-hero-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3rem 0 4rem;
+  }
+
+  .clinic-hero-content {
+    flex: 1;
+    text-align: left;
+    max-width: 50%;
+  }
+
+  .clinic-hero h1 {
+    font-size: 2.25rem;
+  }
+
+  .clinic-hero-image {
+    display: block;
+    flex: 1;
+    max-width: 45%;
+  }
+
+  .clinic-hero-image .clinic-picture,
+  .clinic-hero-image img {
+    width: 100%;
+    border-radius: var(--clinic-radius);
+  }
+
+  .clinic-search-form {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .clinic-search-form select,
+  .clinic-search-form input[type="text"] {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .clinic-search-btn {
+    flex-shrink: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .clinic-hero h1 {
+    font-size: 2.5rem;
+  }
+}

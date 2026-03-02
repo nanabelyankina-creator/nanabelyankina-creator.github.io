@@ -1,0 +1,53 @@
+.clinic-btn,
+.clinic-nav-btn,
+.clinic-hero-cta,
+.clinic-search-btn,
+.clinic-form .btn-primary,
+.clinic-doctor-card .clinic-btn,
+.clinic-doctors-toolbar .clinic-btn,
+.clinic-footer-links a,
+.clinic-nav-links a,
+.clinic-topbar-auth a,
+.clinic-mobile-menu a,
+.profile-edit-btn,
+.clinic-btn-secondary,
+.clinic-btn-sm,
+.appointments-tab:not(.active),
+.clinic-feature-card,
+.clinic-doctor-card,
+.clinic-review-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  transform-origin: center center;
+}
+
+.clinic-btn:hover,
+.clinic-nav-btn:hover,
+.clinic-hero-cta:hover,
+.clinic-search-btn:hover,
+.clinic-form .btn-primary:hover,
+.clinic-doctor-card .clinic-btn:hover,
+.clinic-doctors-toolbar .clinic-btn:hover {
+  transform: scale(1.05);
+}
+
+.clinic-footer-links a:hover,
+.clinic-nav-links a:hover,
+.clinic-topbar-auth a:hover,
+.clinic-mobile-menu a:hover {
+  transform: scale(1.05);
+}
+
+.profile-edit-btn:hover,
+.clinic-btn-secondary:hover {
+  transform: scale(1.08);
+}
+
+.appointments-tab:not(.active):hover {
+  transform: scale(1.03);
+}
+
+.clinic-feature-card:hover,
+.clinic-doctor-card:hover,
+.clinic-review-card:hover {
+  transform: scale(1.02);
+}

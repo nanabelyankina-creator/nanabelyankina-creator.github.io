@@ -1,0 +1,53 @@
+.clinic-features {
+  padding: 2rem 0;
+}
+
+.clinic-features-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.clinic-feature-card {
+  background-color: var(--clinic-primary);
+  color: var(--clinic-white);
+  padding: 1.5rem;
+  border-radius: var(--clinic-radius);
+  text-align: center;
+}
+
+.clinic-feature-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.clinic-feature-card p {
+  font-size: 0.875rem;
+  margin: 0;
+  opacity: 0.95;
+}
+
+.clinic-feature-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .clinic-features-grid {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+
+  .clinic-feature-card {
+    flex: 1;
+    text-align: center;
+  }
+}

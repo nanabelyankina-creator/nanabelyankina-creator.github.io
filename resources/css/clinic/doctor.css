@@ -1,0 +1,199 @@
+.doctor-date-form {
+  margin-bottom: 1rem;
+}
+
+.doctor-date-form label {
+  margin-right: 0.5rem;
+}
+
+.doctor-slots-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.doctor-slot {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--clinic-gray-border);
+  border-radius: var(--clinic-radius);
+}
+
+.doctor-slot-time {
+  font-weight: 600;
+  min-width: 50px;
+}
+
+.doctor-slot-free {
+  background: var(--clinic-gray-bg);
+  color: var(--clinic-gray);
+}
+
+.doctor-slot-free-label {
+  font-size: 0.95rem;
+}
+
+.doctor-slot-occupied {
+  background: var(--clinic-white);
+}
+
+.doctor-slot-body {
+  flex: 1;
+}
+
+.doctor-slot-body p {
+  margin: 0.25rem 0;
+}
+
+.doctor-status-form {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.clinic-time-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.clinic-time-slot {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid #dbeafe;
+  background: #eff6ff;
+  font-size: 0.9rem;
+}
+
+.clinic-time-slot input[type='radio'] {
+  accent-color: var(--clinic-primary);
+}
+
+.clinic-time-slot--disabled {
+  opacity: 0.5;
+  background: #f3f4f6;
+  border-color: #e5e7eb;
+}
+.doctor-layout {
+  display: flex;
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .doctor-layout {
+    flex-direction: column;
+  }
+}
+
+.doctor-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background-color: #f7f9fc;
+  border-radius: var(--clinic-radius);
+  padding: 1rem 1.1rem;
+  box-shadow: 0 2px 6px rgba(15, 35, 52, 0.06);
+}
+
+.doctor-sidebar h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+  color: var(--clinic-text-main, #1f2933);
+}
+
+.doctor-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.doctor-menu li {
+  margin-bottom: 0.4rem;
+}
+
+.doctor-menu li:last-child {
+  margin-bottom: 0;
+}
+
+.doctor-menu a {
+  display: block;
+  padding: 0.5rem 0.6rem;
+  border-radius: 0.4rem;
+  color: var(--clinic-text-main, #1f2933);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.doctor-menu a:hover {
+  background-color: #e1effe;
+  color: #102a43;
+}
+
+.doctor-menu li.active a {
+  background-color: var(--clinic-primary, #1d7ed8);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.doctor-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.doctor-content h1 {
+  font-size: 1.3rem;
+  margin-bottom: 0.75rem;
+}
+
+.doctor-filters {
+  margin: 1rem 0;
+}
+
+.doctor-filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.doctor-filters-row label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.doctor-filters-row input[type='date'],
+.doctor-filters-row input[type='text'] {
+  margin-top: 0.25rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 0.4rem;
+  border: 1px solid #d1d5db;
+  font-size: 0.9rem;
+  min-width: 180px;
+}
+
+.doctor-appointments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.doctor-appointment-card {
+  border-radius: var(--clinic-radius);
+  border: 1px solid var(--clinic-gray-border);
+  padding: 0.75rem 0.9rem;
+  background-color: var(--clinic-white, #ffffff);
+}
+
+.doctor-appointment-card p {
+  margin: 0.15rem 0;
+  font-size: 0.9rem;
+}

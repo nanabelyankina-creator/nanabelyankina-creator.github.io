@@ -1,0 +1,209 @@
+.clinic-profile .profile-block {
+  border: 1px solid var(--clinic-gray-border);
+  border-radius: var(--clinic-radius);
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.profile-block-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: var(--clinic-gray-bg);
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.profile-block-toggle h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.profile-block-arrow {
+  font-size: 0.75rem;
+  color: var(--clinic-gray);
+}
+
+.profile-block-content {
+  padding: 1.25rem;
+}
+
+.profile-block-content.profile-block-collapsed {
+  display: none;
+}
+
+.profile-field {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.profile-field-label {
+  font-weight: 500;
+  min-width: 100px;
+}
+
+.profile-field-value {
+  flex: 1;
+  min-width: 120px;
+}
+
+.profile-field-readonly {
+  color: var(--clinic-gray);
+}
+
+.profile-field-hint {
+  font-size: 0.85rem;
+  color: var(--clinic-gray);
+  width: 100%;
+  margin-left: 100px;
+}
+
+.profile-edit-btn {
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  cursor: pointer;
+  color: var(--clinic-primary);
+}
+
+.profile-edit-btn:hover {
+  color: var(--clinic-primary-dark);
+}
+
+.profile-inline-edit {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.profile-inline-input {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--clinic-gray-border);
+  border-radius: var(--clinic-radius);
+  font-size: 0.95rem;
+  min-width: 150px;
+}
+
+.clinic-btn-sm {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.clinic-btn-secondary {
+  background: var(--clinic-gray-bg);
+  color: var(--clinic-dark);
+}
+
+.clinic-btn-secondary:hover {
+  background: var(--clinic-gray-border);
+}
+
+.profile-empty {
+  color: var(--clinic-gray);
+  margin: 0.5rem 0;
+}
+
+.profile-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+.profile-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--clinic-gray-border);
+}
+
+.profile-list li:last-child {
+  border-bottom: none;
+}
+
+.appointments-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.appointments-tab {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--clinic-gray-border);
+  background: var(--clinic-gray-bg);
+  border-radius: var(--clinic-radius);
+  cursor: pointer;
+}
+
+.appointments-tab.active {
+  background: var(--clinic-primary);
+  color: var(--clinic-white);
+  border-color: var(--clinic-primary);
+}
+
+.appointments-list {
+  list-style: none;
+  padding: 0;
+}
+
+.appointments-list li {
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--clinic-gray-border);
+  border-radius: var(--clinic-radius);
+}
+
+.review-done {
+  color: var(--clinic-accent);
+  font-size: 0.9rem;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: var(--clinic-white);
+  padding: 2rem;
+  border-radius: var(--clinic-radius);
+  max-width: 400px;
+  width: 90%;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+}
+
+.modal-content .form-group {
+  margin-bottom: 1rem;
+}
+
+.modal-content .clinic-btn {
+  margin-right: 0.5rem;
+}
+
+.analyses-list {
+  list-style: none;
+  padding: 0;
+}
+
+.analyses-list li {
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--clinic-gray-border);
+  border-radius: var(--clinic-radius);
+}

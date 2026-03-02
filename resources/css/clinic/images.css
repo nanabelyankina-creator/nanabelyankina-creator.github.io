@@ -1,0 +1,92 @@
+.clinic-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.clinic-img--cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.clinic-picture {
+  display: block;
+  line-height: 0;
+}
+
+.clinic-picture img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.clinic-hero-image .clinic-picture,
+.clinic-hero-image picture {
+  width: 100%;
+  height: auto;
+}
+
+.clinic-hero-image img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--clinic-radius);
+}
+
+.clinic-avatar {
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--clinic-gray-bg);
+}
+
+.clinic-avatar--sm {
+  width: 64px;
+  height: 64px;
+}
+
+.clinic-avatar--md {
+  width: 80px;
+  height: 80px;
+}
+
+.clinic-avatar--lg {
+  width: 120px;
+  height: 120px;
+}
+
+.clinic-avatar--xl {
+  width: 150px;
+  height: 150px;
+}
+
+.clinic-avatar img,
+.clinic-avatar picture,
+.clinic-avatar .clinic-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (min-width: 640px) {
+  .clinic-avatar--sm { width: 72px; height: 72px; }
+  .clinic-avatar--md { width: 90px; height: 90px; }
+  .clinic-avatar--lg { width: 140px; height: 140px; }
+  .clinic-avatar--xl { width: 180px; height: 180px; }
+}
+
+@media (min-width: 1024px) {
+  .clinic-avatar--sm { width: 80px; height: 80px; }
+  .clinic-avatar--md { width: 100px; height: 100px; }
+  .clinic-avatar--lg { width: 150px; height: 150px; }
+  .clinic-avatar--xl { width: 200px; height: 200px; }
+}
+
+.avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: var(--clinic-gray-bg);
+  font-size: 2rem;
+}

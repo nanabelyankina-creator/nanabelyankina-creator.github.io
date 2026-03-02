@@ -1,0 +1,117 @@
+.clinic-hero-subtitle {
+  margin: 0 0 1.5rem;
+  color: var(--clinic-gray);
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.clinic-hero-cta {
+  display: inline-block;
+  padding: 0.875rem 1.75rem;
+  background-color: var(--clinic-primary);
+  color: var(--clinic-white) !important;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--clinic-radius);
+  margin-bottom: 1.5rem;
+  transition: background-color 0.2s;
+}
+
+.clinic-hero-cta:hover {
+  background-color: var(--clinic-primary-dark);
+}
+
+.clinic-doctor-rating {
+  font-size: 0.9rem;
+  color: var(--clinic-accent);
+  margin: 0.25rem 0;
+}
+
+.clinic-reviews {
+  padding: 3rem 0;
+  background: var(--clinic-gray-bg);
+}
+
+.clinic-reviews h2 {
+  text-align: center;
+  margin: 0 0 0.5rem;
+  color: var(--clinic-dark);
+}
+
+.clinic-reviews-intro {
+  text-align: center;
+  color: var(--clinic-gray);
+  margin: 0 0 2rem;
+}
+
+.clinic-reviews-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .clinic-reviews-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .clinic-reviews-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.clinic-review-card {
+  background: var(--clinic-white);
+  padding: 1.5rem;
+  border-radius: var(--clinic-radius);
+  box-shadow: var(--clinic-shadow);
+}
+
+.clinic-review-rating {
+  color: var(--clinic-accent);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.clinic-review-text {
+  margin: 0 0 1rem;
+  color: var(--clinic-dark);
+  line-height: 1.5;
+}
+
+.clinic-review-doctor {
+  font-size: 0.9rem;
+  color: var(--clinic-primary);
+  margin: 0 0 0.25rem;
+}
+
+.clinic-review-author {
+  font-size: 0.85rem;
+  color: var(--clinic-gray);
+  margin: 0;
+}
+
+.clinic-map-section {
+  padding: 3rem 0;
+}
+
+.clinic-map-section h2 {
+  margin: 0 0 1rem;
+  color: var(--clinic-dark);
+}
+
+.clinic-map-address,
+.clinic-map-phone {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+
+.clinic-map-container {
+  width: 100%;
+  height: 400px;
+  margin-top: 1.5rem;
+  border-radius: var(--clinic-radius);
+  overflow: hidden;
+}

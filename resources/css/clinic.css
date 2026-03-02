@@ -1,0 +1,54 @@
+@import './clinic/variables.css';
+@import './clinic/global.css';
+@import './clinic/interactive.css';
+@import './clinic/images.css';
+@import './clinic/header.css';
+@import './clinic/hero.css';
+@import './clinic/features.css';
+@import './clinic/doctors.css';
+@import './clinic/why-choose.css';
+@import './clinic/reviews-map.css';
+@import './clinic/footer.css';
+@import './clinic/forms.css';
+@import './clinic/profile.css';
+@import './clinic/doctor.css';
+@import './clinic/admin.css';
+@import './clinic/client-chat.css';
+
+nav[aria-label="Pagination Navigation"] {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+nav[aria-label="Pagination Navigation"] svg {
+    width: 14px;
+    height: 14px;
+}
+
+nav[aria-label="Pagination Navigation"] a,
+nav[aria-label="Pagination Navigation"] span {
+    font-size: 12px;
+    padding: 4px 8px;
+    line-height: 1;
+}
+
+
+.clinic-logo {
+    display: inline-flex;   
+    align-items: center;   
+    gap: 8px;             
+    text-decoration: none;
+    color: inherit;
+}
+
+.clinic-logo-icon {
+    width:35px; 
+    height: 35px;
+    display: block;
+}
+
+.clinic-logo-text {
+    font-weight: 700;
+    font-size: 20px; 
+}

@@ -1,0 +1,17 @@
+:root {
+  --clinic-primary: #2563eb;
+  --clinic-primary-dark: #1d4ed8;
+  --clinic-white: #ffffff;
+  --clinic-dark: #1f2937;
+  --clinic-dark-alt: #111827;
+  --clinic-gray: #6b7280;
+  --clinic-gray-light: #9ca3af;
+  --clinic-gray-bg: #f3f4f6;
+  --clinic-gray-border: #e5e7eb;
+  --clinic-accent: #f59e0b;
+  --clinic-font: 'Open Sans', 'Roboto', 'Lato', system-ui, sans-serif;
+  --clinic-container: 1200px;
+  --clinic-radius: 8px;
+  --clinic-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --clinic-shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}

@@ -1,0 +1,187 @@
+.clinic-doctors {
+  padding: 3rem 0;
+  background-color: var(--clinic-white);
+}
+
+.clinic-doctors-header {
+  margin-bottom: 2rem;
+}
+
+.clinic-doctors-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--clinic-dark);
+  margin: 0 0 0.5rem;
+}
+
+.clinic-doctors-header p {
+  color: var(--clinic-gray);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.clinic-doctors-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.clinic-doctors-toolbar select,
+.clinic-doctors-toolbar input {
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--clinic-gray-border);
+  border-radius: var(--clinic-radius);
+  font-size: 0.95rem;
+}
+
+.clinic-doctors-toolbar .clinic-btn {
+  padding: 0.6rem 1.25rem;
+  background-color: var(--clinic-primary);
+  color: var(--clinic-white);
+  border: none;
+  border-radius: var(--clinic-radius);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.clinic-doctors-toolbar .clinic-btn:hover {
+  background-color: var(--clinic-primary-dark);
+}
+
+.clinic-doctors-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.clinic-doctor-card {
+  background-color: var(--clinic-white);
+  border: 1px solid var(--clinic-gray-border);
+  border-radius: var(--clinic-radius);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: var(--clinic-shadow);
+}
+
+.clinic-doctor-card:hover {
+  box-shadow: var(--clinic-shadow-lg);
+}
+
+.clinic-doctor-avatar {
+  margin-bottom: 1rem;
+}
+
+.doctor-profile-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.clinic-doctor-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+  color: var(--clinic-dark);
+}
+
+.clinic-doctor-specialty {
+  color: var(--clinic-gray);
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.clinic-doctor-meta {
+  color: var(--clinic-gray-light);
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.clinic-doctor-card .clinic-btn {
+  padding: 0.5rem 1rem;
+  background-color: var(--clinic-primary);
+  color: var(--clinic-white);
+  border-radius: var(--clinic-radius);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.clinic-doctor-card .clinic-btn:hover {
+  background-color: var(--clinic-primary-dark);
+}
+
+@media (min-width: 640px) {
+  .clinic-doctors-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .clinic-doctors-toolbar {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+@media (min-width: 1024px) {
+  .clinic-doctors-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.doctor-price-old {
+  text-decoration: line-through;
+  color: #9ca3af;
+  margin-right: 0.4rem;
+}
+
+.doctor-price-new {
+  font-weight: 600;
+}
+
+.doctor-price-badge {
+  font-size: 0.8rem;
+  color: #ffffff;
+  background: #ef4444;
+  border-radius: 999px;
+  padding: 0.15rem 0.45rem;
+  margin-left: 0.25rem;
+}
+
+.clinic-doctor-card .clinic-doctor-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.clinic-doctor-card .clinic-doctor-link:hover {
+    text-decoration: none;
+}
+
+.clinic-doctor-card {
+  background-color: var(--clinic-white);
+  border: 1px solid var(--clinic-gray-border);
+  border-radius: var(--clinic-radius);
+  padding: 1.25rem;
+  box-shadow: var(--clinic-shadow);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  text-align: center;
+}
+
+.clinic-doctor-card .clinic-doctor-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+}
+
+.clinic-doctor-avatar {
+  margin-left: 0;
+  margin-right: 0;
+}
