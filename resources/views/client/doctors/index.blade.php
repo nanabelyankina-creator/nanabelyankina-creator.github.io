@@ -28,19 +28,29 @@
                     <article class="clinic-doctor-card">
                         <a href="{{ route('doctors.show', $doctor->id) }}" class="clinic-doctor-link">
                             <div class="clinic-doctor-avatar clinic-avatar clinic-avatar--md">
-                                @if ($doctor->avatar_path)
-                                    <img
-                                        src="{{ asset($doctor->avatar_path) }}"
-                                        alt="Фото врача {{ $doctor->last_name }} {{ $doctor->first_name }}"
-                                    >
-                                @else
-                                    <div class="avatar-placeholder">
-                                        {{ mb_substr($doctor->first_name, 0, 1) }}{{ mb_substr($doctor->last_name, 0, 1) }}
-                                    </div>
-                                @endif
+                                <img
+                                    class="clinic-img clinic-img--cover"
+                                    src="{{ asset('images/startphotodoctor.png') }}"
+                                    alt="Фото врача {{ $doctor->last_name }} {{ $doctor->first_name }}"
+                                >
                             </div>
                             <h3>{{ $doctor->last_name }} {{ $doctor->first_name }} {{ $doctor->middle_name }}</h3>
                             <p class="clinic-doctor-specialty">{{ $doctor->specialization->name ?? '' }}</p>
+
+                            @php
+                                $avgRounded = (int) round($doctor->reviews_avg_rating ?? 0);
+                                $reviewsCount = $doctor->reviews_count ?? 0;
+                            @endphp
+                            @if($reviewsCount > 0)
+                                <div class="doctor-rating-stars doctor-rating-stars--sm" aria-label="Средняя оценка: {{ $avgRounded }} из 5">
+                                    @for($i=1;$i<=5;$i++)
+                                        <span class="doctor-rating-stars__star {{ $i <= $avgRounded ? 'is-active' : '' }}">★</span>
+                                    @endfor
+                                </div>
+                                <p class="clinic-text-muted" style="margin:0.35rem 0 0; font-size:0.85rem;">
+                                    {{ $avgRounded }}/5 ({{ $reviewsCount }} {{ $reviewsCount % 10 == 1 && $reviewsCount % 100 != 11 ? 'отзыв' : ($reviewsCount % 10 >= 2 && $reviewsCount % 10 <= 4 && ($reviewsCount % 100 < 10 || $reviewsCount % 100 >= 20) ? 'отзыва' : 'отзывов') }})
+                                </p>
+                            @endif
 
                             @php
                                 $basePrice = $doctor->base_price;

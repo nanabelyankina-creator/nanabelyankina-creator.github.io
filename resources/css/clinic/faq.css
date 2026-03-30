@@ -1,0 +1,82 @@
+.clinic-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.clinic-faq-item {
+  position: relative;
+  padding: 1.25rem;
+  border: 1px solid #bfdbfe; /* синяя обводка */
+  border-radius: var(--clinic-radius);
+  background: var(--clinic-white);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.clinic-faq-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.08);
+}
+
+.clinic-faq-question {
+  width: 100%;
+  padding-right: 2.75rem; /* место под треугольник */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+}
+
+.clinic-faq-question-text {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--clinic-dark);
+}
+
+.clinic-faq-caret {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--clinic-primary);
+  font-size: 0.9rem;
+  transform: rotate(0deg);
+  transition: transform 0.2s ease;
+  user-select: none;
+}
+
+.clinic-faq-caret svg {
+  width: 18px;
+  height: 18px;
+}
+
+.clinic-faq-answer {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease, opacity 0.25s ease;
+  margin-top: 0;
+}
+
+.clinic-faq-item.is-open .clinic-faq-answer {
+  max-height: 260px;
+  opacity: 1;
+  margin-top: 0.75rem;
+}
+
+.clinic-faq-answer p {
+  margin: 0;
+  color: var(--clinic-gray);
+  line-height: 1.6;
+}
+
+.clinic-faq-item.is-open .clinic-faq-caret {
+  transform: rotate(180deg);
+}
+
+

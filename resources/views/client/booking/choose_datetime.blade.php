@@ -57,7 +57,11 @@
             </form>
         @endif
 
-        <p><a href="{{ route('client.book.doctor') }}">← Назад к выбору врача</a></p>
+        <p>
+            <a href="{{ route('client.book.doctor.get', ['specialization_id' => $specialization->id]) }}">
+                ← Назад к выбору врача
+            </a>
+        </p>
     </div>
 </section>
 @endsection

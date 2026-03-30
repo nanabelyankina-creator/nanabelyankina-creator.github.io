@@ -40,19 +40,21 @@
             </select>
         </div>
 
-        <div class="clinic-form-group">
-            <label>Фамилия *</label>
-            <input type="text" name="last_name" value="{{ old('last_name', $doctor->last_name) }}" required>
-        </div>
+        <div class="clinic-form-row">
+            <div class="clinic-form-group">
+                <label>Фамилия *</label>
+                <input type="text" name="last_name" value="{{ old('last_name', $doctor->last_name) }}" required>
+            </div>
 
-        <div class="clinic-form-group">
-            <label>Имя *</label>
-            <input type="text" name="first_name" value="{{ old('first_name', $doctor->first_name) }}" required>
-        </div>
+            <div class="clinic-form-group">
+                <label>Имя *</label>
+                <input type="text" name="first_name" value="{{ old('first_name', $doctor->first_name) }}" required>
+            </div>
 
-        <div class="clinic-form-group">
-            <label>Отчество</label>
-            <input type="text" name="middle_name" value="{{ old('middle_name', $doctor->middle_name) }}">
+            <div class="clinic-form-group">
+                <label>Отчество</label>
+                <input type="text" name="middle_name" value="{{ old('middle_name', $doctor->middle_name) }}">
+            </div>
         </div>
 
         <div class="clinic-form-group">

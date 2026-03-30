@@ -31,10 +31,6 @@
             <h2>FAQ</h2>
             <p>Ответы на популярные вопросы пациентов.</p>
         </a>
-        <a href="{{ route('admin.pages.index') }}" class="clinic-admin-card">
-            <h2>Страницы</h2>
-            <p>Статические страницы «О нас», «Контакты» и др.</p>
-        </a>
         <a href="{{ route('admin.chat.index') }}" class="clinic-admin-card">
             <h2>Чат</h2>
             <p>Переписка с пациентами в режиме реального времени.</p>

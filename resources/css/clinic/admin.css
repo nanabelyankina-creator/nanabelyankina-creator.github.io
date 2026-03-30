@@ -39,6 +39,12 @@
     color: var(--clinic-primary);
 }
 
+.clinic-admin-nav a.is-active {
+    background: #eff6ff;
+    color: var(--clinic-primary);
+    font-weight: 600;
+}
+
 .clinic-admin-logout {
     margin-top: auto;
 }
@@ -228,6 +234,38 @@
     margin-bottom: 1rem;
 }
 
+.clinic-filter input[type="text"],
+.clinic-filter input[type="number"],
+.clinic-filter input[type="date"],
+.clinic-filter input[type="email"],
+.clinic-filter select,
+.clinic-filter textarea,
+.clinic-input {
+    padding: 0.65rem 1rem;
+    border: 1px solid #bfdbfe; /* синяя обводка */
+    border-radius: var(--clinic-radius);
+    font-size: 0.95rem;
+    background: var(--clinic-white);
+}
+
+.clinic-filter input[type="text"]:focus,
+.clinic-filter input[type="number"]:focus,
+.clinic-filter input[type="date"]:focus,
+.clinic-filter input[type="email"]:focus,
+.clinic-filter select:focus,
+.clinic-filter textarea:focus,
+.clinic-input:focus {
+    outline: none;
+    border-color: var(--clinic-primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+}
+
+.clinic-filter input::placeholder,
+.clinic-filter textarea::placeholder,
+.clinic-input::placeholder {
+    color: var(--clinic-gray-light);
+}
+
 .clinic-form {
     display: flex;
     flex-direction: column;
@@ -257,6 +295,18 @@
     flex-direction: row;
     align-items: center;
     gap: 0.5rem;
+}
+
+.clinic-form-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.clinic-form-row > .clinic-form-group {
+    flex: 1;
+    min-width: 220px;
 }
 
 .clinic-form-actions {
@@ -434,11 +484,26 @@
     display: flex;
     gap: 0.6rem;
     margin-top: 0.5rem;
+    align-items: flex-end;
 }
 
 .clinic-chat-form textarea {
     flex: 1;
-    resize: vertical;
+    resize: none; /* нельзя тянуть мышкой больше */
+    border: 1px solid #bfdbfe; /* синяя оболочка */
+    border-radius: 999px;
+    background: var(--clinic-white);
+    padding: 0.65rem 1rem;
+    min-height: 44px;
+    max-height: 160px;
+    overflow-y: auto;
+    outline: none;
+    line-height: 1.4;
+}
+
+.clinic-chat-form textarea:focus {
+    border-color: var(--clinic-primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
 }
 
 @media (max-width: 960px) {

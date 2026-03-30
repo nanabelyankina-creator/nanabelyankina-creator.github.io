@@ -14,6 +14,8 @@
 @import './clinic/doctor.css';
 @import './clinic/admin.css';
 @import './clinic/client-chat.css';
+@import './clinic/faq.css';
+@import './clinic/pages.css';
 
 nav[aria-label="Pagination Navigation"] {
     display: flex;

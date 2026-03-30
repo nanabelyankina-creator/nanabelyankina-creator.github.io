@@ -9,11 +9,25 @@
         @if($faqs->isEmpty())
             <p>Пока нет вопросов.</p>
         @else
-            <div style="display:flex;flex-direction:column;gap:1rem;margin-top:1.5rem;">
+            <div class="clinic-faq-list">
                 @foreach($faqs as $faq)
-                    <div style="padding:1.25rem;border:1px solid var(--clinic-gray-border);border-radius:var(--clinic-radius);">
-                        <h3 style="margin:0 0 0.5rem;">{{ $faq->question }}</h3>
-                        <p style="margin:0;color:var(--clinic-gray);">{{ $faq->answer }}</p>
+                    <div class="clinic-faq-item">
+                        <button
+                            type="button"
+                            class="clinic-faq-question"
+                            aria-expanded="false"
+                        >
+                            <h3 class="clinic-faq-question-text">{{ $faq->question }}</h3>
+                            <span class="clinic-faq-caret" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </button>
+
+                        <div class="clinic-faq-answer">
+                            {!! nl2br(e($faq->answer)) !!}
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -21,3 +35,23 @@
     </div>
 </section>
 @endsection
+
+@push('scripts')
+<script>
+(function() {
+    document.querySelectorAll('.clinic-faq-item').forEach(function(item) {
+        const btn = item.querySelector('.clinic-faq-question');
+        const answer = item.querySelector('.clinic-faq-answer');
+        if (!btn || !answer) return;
+
+        btn.addEventListener('click', function() {
+            const isOpen = item.classList.toggle('is-open');
+            btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+
+            const caretSvgPath = item.querySelector('.clinic-faq-caret svg path');
+            // Меняем поворот треугольника через CSS (класс is-open достаточно)
+        });
+    });
+})();
+</script>
+@endpush

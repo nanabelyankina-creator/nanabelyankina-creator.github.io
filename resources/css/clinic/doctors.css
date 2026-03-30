@@ -30,9 +30,17 @@
 .clinic-doctors-toolbar select,
 .clinic-doctors-toolbar input {
   padding: 0.6rem 1rem;
-  border: 1px solid var(--clinic-gray-border);
+  border: 1px solid #bfdbfe; /* синяя обводка */
   border-radius: var(--clinic-radius);
   font-size: 0.95rem;
+  background: var(--clinic-white);
+}
+
+.clinic-doctors-toolbar select:focus,
+.clinic-doctors-toolbar input:focus {
+  outline: none;
+  border-color: var(--clinic-primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
 }
 
 .clinic-doctors-toolbar .clinic-btn {

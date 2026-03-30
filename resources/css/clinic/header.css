@@ -1,3 +1,12 @@
+.clinic-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
 .clinic-topbar {
   background-color: var(--clinic-gray-bg);
   padding: 0.5rem 0;
@@ -57,12 +66,12 @@
 }
 
 .clinic-nav-links a {
-  padding: 0.5rem 1rem;
+  padding: 0.45rem 0.75rem;
   color: var(--clinic-dark);
   font-weight: 500;
   text-transform: uppercase;
-  font-size: 0.8rem;
-  letter-spacing: 0.05em;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
 }
 
 .clinic-nav-links a:hover {
@@ -71,11 +80,12 @@
 
 .clinic-nav-btn {
   display: inline-block;
-  padding: 0.5rem 1rem;
+  padding: 0.45rem 0.85rem;
   background-color: var(--clinic-primary);
   color: var(--clinic-white) !important;
   border-radius: var(--clinic-radius);
   font-weight: 600;
+  font-size: 0.75rem;
 }
 
 .clinic-nav-btn:hover {

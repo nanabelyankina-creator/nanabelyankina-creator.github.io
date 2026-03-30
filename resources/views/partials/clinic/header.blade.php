@@ -9,10 +9,9 @@
                 <div class="clinic-topbar-auth">
                     @auth
                         @if(auth()->user()->isPatient())
-                            <a href="{{ route('profile') }}">Личный кабинет</a>
-                            <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+                            <form action="{{ route('logout') }}" method="POST" class="clinic-logout-form">
                                 @csrf
-                                <button type="submit" style="background:none;border:none;color:var(--clinic-primary);cursor:pointer;font:inherit;">Выйти</button>
+                                <button type="submit" class="clinic-btn clinic-btn-secondary clinic-btn-sm clinic-logout-btn">Выйти</button>
                             </form>
                         @elseif(auth()->user()->isDoctor())
                             <a href="{{ route('doctor.dashboard') }}">Кабинет врача</a>
@@ -44,6 +43,9 @@
                     @if(in_array('about', $layoutPages ?? []))<a href="{{ route('page.show', 'about') }}">О нас</a>@endif
                     @if(in_array('contacts', $layoutPages ?? []))<a href="{{ route('page.show', 'contacts') }}">Контакты</a>@endif
                     <a href="{{ auth()->check() && auth()->user()->isPatient() ? route('client.chat.index') : route('login.show', ['redirect' => urlencode(route('client.chat.index'))]) }}">Связаться по чату</a>
+                    @if(auth()->check() && auth()->user()->isPatient())
+                        <a href="{{ route('profile') }}">Личный кабинет</a>
+                    @endif
                     <a href="{{ auth()->check() && auth()->user()->isPatient() ? route('client.book.specialization') : route('guest.book.patient') }}" class="clinic-nav-btn">Записаться к врачу</a>
                 </div>
 
@@ -61,6 +63,9 @@
                 @if(in_array('about', $layoutPages ?? []))<a href="{{ route('page.show', 'about') }}">О нас</a>@endif
                 @if(in_array('contacts', $layoutPages ?? []))<a href="{{ route('page.show', 'contacts') }}">Контакты</a>@endif
                 <a href="{{ auth()->check() && auth()->user()->isPatient() ? route('client.chat.index') : route('login.show', ['redirect' => urlencode(route('client.chat.index'))]) }}">Связаться по чату</a>
+                @if(auth()->check() && auth()->user()->isPatient())
+                    <a href="{{ route('profile') }}">Личный кабинет</a>
+                @endif
                 <a href="{{ auth()->check() && auth()->user()->isPatient() ? route('client.book.specialization') : route('guest.book.patient') }}" class="clinic-nav-btn" style="text-align:center;">Записаться к врачу</a>
             </div>
         </div>

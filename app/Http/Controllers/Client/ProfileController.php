@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Rules\RussianPhone;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -50,6 +51,8 @@ class ProfileController extends Controller
                 'max:255',
                 Rule::unique('users', 'email')->ignore($user->id),
             ],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif'],
+            'avatar_remove' => ['sometimes', 'boolean'],
         ]);
 
         $userData = [];
@@ -67,6 +70,24 @@ class ProfileController extends Controller
             }
             $patient->update($patientData);
         }
+
+        // Аватар пользователя (для клиентов)
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar_path) {
+                $oldPath = str_replace('storage/', '', $user->avatar_path);
+                Storage::disk('public')->delete($oldPath);
+            }
+
+            $path = $request->file('avatar')->store('avatars/users', 'public');
+            $userData['avatar_path'] = 'storage/' . $path;
+        } elseif ($request->boolean('avatar_remove')) {
+            if ($user->avatar_path) {
+                $oldPath = str_replace('storage/', '', $user->avatar_path);
+                Storage::disk('public')->delete($oldPath);
+            }
+            $userData['avatar_path'] = null;
+        }
+
         if (!empty($userData)) {
             $user->update($userData);
         }

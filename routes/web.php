@@ -51,6 +51,7 @@ Route::middleware(['auth', 'not_blocked'])->group(function () {
     Route::get('/my-analyses', [AnalysisController::class, 'index'])->name('client.analyses.index');
 
     Route::get('/book', [VisitBookingController::class, 'chooseSpecialization'])->name('client.book.specialization');
+    Route::get('/book/doctor', [VisitBookingController::class, 'chooseDoctor'])->name('client.book.doctor.get');
     Route::post('/book/doctor', [VisitBookingController::class, 'chooseDoctor'])->name('client.book.doctor');
     Route::get('/book/datetime', [VisitBookingController::class, 'chooseDateTime'])->name('client.book.datetime');
     Route::post('/book/confirm', [VisitBookingController::class, 'store'])->name('client.book.store');

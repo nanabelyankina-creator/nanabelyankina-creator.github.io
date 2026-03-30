@@ -77,13 +77,14 @@
             <input type="hidden" name="appointment_id" id="review-appointment-id">
             <div class="form-group">
                 <label>Оценка *</label>
-                <select name="rating" required>
-                    <option value="5">5 — Отлично</option>
-                    <option value="4">4 — Хорошо</option>
-                    <option value="3">3 — Удовлетворительно</option>
-                    <option value="2">2 — Плохо</option>
-                    <option value="1">1 — Очень плохо</option>
-                </select>
+                <input type="hidden" name="rating" id="review-rating-input" value="{{ old('rating') }}" required>
+                <div class="clinic-star-widget" id="review-star-widget" role="radiogroup" aria-label="Оценка от 1 до 5">
+                    <button type="button" class="clinic-star" data-star="1" aria-label="1 звезда">★</button>
+                    <button type="button" class="clinic-star" data-star="2" aria-label="2 звезды">★</button>
+                    <button type="button" class="clinic-star" data-star="3" aria-label="3 звезды">★</button>
+                    <button type="button" class="clinic-star" data-star="4" aria-label="4 звезды">★</button>
+                    <button type="button" class="clinic-star" data-star="5" aria-label="5 звёзд">★</button>
+                </div>
             </div>
             <div class="form-group">
                 <label>Комментарий (необязательно)</label>
@@ -99,6 +100,52 @@
 @push('scripts')
 <script>
 (function() {
+    const starWidget = document.getElementById('review-star-widget');
+    const ratingInput = document.getElementById('review-rating-input');
+
+    function renderStars(value) {
+        if (!starWidget || !ratingInput) return;
+
+        const selected = Number(value || 0);
+        starWidget.querySelectorAll('.clinic-star').forEach(function(btn) {
+            const v = Number(btn.dataset.star);
+            btn.classList.toggle('is-active', v <= selected);
+        });
+    }
+
+    function getSelectedStarsValue() {
+        const val = Number(ratingInput?.value || 0);
+        return Number.isFinite(val) ? val : 0;
+    }
+
+    // Star rating widget
+    if (starWidget && ratingInput) {
+        let selected = getSelectedStarsValue();
+        renderStars(selected);
+
+        starWidget.addEventListener('mouseleave', function() {
+            renderStars(selected);
+        });
+
+        starWidget.querySelectorAll('.clinic-star').forEach(function(btn) {
+            const v = Number(btn.dataset.star);
+            btn.addEventListener('mouseenter', function() {
+                // На наведение горят только первые N звёзд
+                renderStars(v);
+            });
+
+            btn.addEventListener('focus', function() {
+                renderStars(v);
+            });
+
+            btn.addEventListener('click', function() {
+                selected = v;
+                ratingInput.value = String(selected);
+                renderStars(selected);
+            });
+        });
+    }
+
     document.querySelectorAll('.appointments-tab').forEach(function(tab) {
         tab.addEventListener('click', function() {
             document.querySelectorAll('.appointments-tab').forEach(function(t) { t.classList.remove('active'); });
@@ -111,6 +158,9 @@
         btn.addEventListener('click', function() {
             document.getElementById('review-appointment-id').value = this.getAttribute('data-review-appointment');
             document.getElementById('review-doctor-name').textContent = 'Врач: ' + this.getAttribute('data-doctor');
+            // Сбросить рейтинг при открытии формы для другой записи
+            if (ratingInput) ratingInput.value = '';
+            if (starWidget) renderStars(0);
             document.getElementById('review-modal').style.display = 'flex';
         });
     });

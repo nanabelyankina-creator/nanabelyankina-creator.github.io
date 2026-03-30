@@ -8,6 +8,13 @@ use App\Models\Patient;
 use App\Models\Specialization;
 use App\Models\Appointment;
 use App\Models\Review;
+use App\Models\Promotion;
+use App\Models\Analysis;
+use App\Models\Faq;
+use App\Models\DoctorEducation;
+use App\Models\Page;
+use App\Models\ChatThread;
+use App\Models\ChatMessage;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -82,6 +89,50 @@ class ClinicDataSeeder extends Seeder
             $doctors[] = $doctor;
         }
 
+        // Seed doctor education (образование)
+        foreach ($doctors as $dIndex => $doctor) {
+            $specialtyName = $doctor->specialization?->name ?? null;
+
+            $educationSeed = [
+                [
+                    'type' => DoctorEducation::TYPE_UNIVERSITY,
+                    'institution' => 'Медицинский университет',
+                    'year' => 2008 + ($dIndex % 3),
+                    'specialty' => $specialtyName,
+                    'sort_order' => 0,
+                ],
+                [
+                    'type' => DoctorEducation::TYPE_RESIDENCY,
+                    'institution' => 'Клиническая ординатура',
+                    'year' => 2012 + ($dIndex % 3),
+                    'specialty' => $specialtyName,
+                    'sort_order' => 1,
+                ],
+                [
+                    'type' => DoctorEducation::TYPE_COURSES,
+                    'institution' => 'Курсы повышения квалификации',
+                    'year' => 2017 + ($dIndex % 4),
+                    'specialty' => $specialtyName,
+                    'sort_order' => 2,
+                ],
+            ];
+
+            foreach ($educationSeed as $edu) {
+                DoctorEducation::updateOrCreate(
+                    [
+                        'doctor_id' => $doctor->id,
+                        'type' => $edu['type'],
+                        'institution' => $edu['institution'],
+                        'year' => $edu['year'],
+                        'specialty' => $edu['specialty'],
+                    ],
+                    [
+                        'sort_order' => $edu['sort_order'],
+                    ]
+                );
+            }
+        }
+
         $clientData = [
             ['last' => 'Кузнецова', 'first' => 'Светлана', 'middle' => 'Леонидовна'],
             ['last' => 'Смирнов',   'first' => 'Игорь',    'middle' => 'Александрович'],
@@ -119,16 +170,31 @@ class ClinicDataSeeder extends Seeder
                    .' '
                    .str_pad((string)($index+10), 2, '0', STR_PAD_LEFT);
 
-            $patient = Patient::updateOrCreate(
-                ['snils' => $snils],
-                [
-                    'user_id'    => $user->id,
+            // В БД храним СНИЛС как 11 цифр (без разделителей), чтобы вход работал стабильно.
+            $snils = \App\Services\SnilsValidator::normalize($snils);
+
+            // Чтобы не плодить дубликаты при повторном сидировании — обновляем по `user_id`.
+            $patient = Patient::where('user_id', $user->id)->first();
+            if ($patient) {
+                $patient->update([
+                    'snils' => $snils,
                     'last_name'  => $c['last'],
                     'first_name' => $c['first'],
                     'middle_name'=> $c['middle'],
                     'phone'      => $user->phone,
-                ]
-            );
+                ]);
+            } else {
+                $patient = Patient::updateOrCreate(
+                    ['snils' => $snils],
+                    [
+                        'user_id'    => $user->id,
+                        'last_name'  => $c['last'],
+                        'first_name' => $c['first'],
+                        'middle_name'=> $c['middle'],
+                        'phone'      => $user->phone,
+                    ]
+                );
+            }
 
             $patients[] = $patient;
         }
@@ -187,5 +253,200 @@ class ClinicDataSeeder extends Seeder
                 }
             }
         }
+
+        // Seed promotions (акции) + привязка пациентов к акциям
+        if (count($patients) > 0 && count($doctors) > 0) {
+            $promotionSeed = [
+                [
+                    'title' => 'Скидка 20% на консультации',
+                    'short_description' => 'Спецпредложение для наших пациентов: -20% на приемы.',
+                    'content' => 'На период акции действуют скидки на приемы в клинике. Подробности уточняйте у администраторов.',
+                    'starts_at' => now()->subDays(10),
+                    'ends_at' => now()->addDays(30),
+                    'is_active' => true,
+                    'discount_percent' => 20,
+                    'patient_indexes' => [0, 1, 2, 3],
+                ],
+                [
+                    'title' => 'Диагностика со скидкой 15%',
+                    'short_description' => 'Успейте записаться и получите -15% на обследования.',
+                    'content' => 'Скидка распространяется на выбранные приемы и обследования в период действия акции.',
+                    'starts_at' => now()->subDays(5),
+                    'ends_at' => now()->addDays(20),
+                    'is_active' => true,
+                    'discount_percent' => 15,
+                    'patient_indexes' => [4, 5, 6],
+                ],
+                [
+                    'title' => 'Летняя акция: -10% на повторные визиты',
+                    'short_description' => 'Для пациентов, которые уже проходили лечение ранее.',
+                    'content' => 'Если у вас есть история обращений в клинику, вы можете воспользоваться скидкой на повторный визит.',
+                    'starts_at' => now()->subDays(2),
+                    'ends_at' => now()->addDays(40),
+                    'is_active' => true,
+                    'discount_percent' => 10,
+                    'patient_indexes' => [0, 7, 8],
+                ],
+            ];
+
+            foreach ($promotionSeed as $seed) {
+                $promotion = Promotion::updateOrCreate(
+                    ['title' => $seed['title']],
+                    [
+                        'short_description' => $seed['short_description'],
+                        'content' => $seed['content'],
+                        'starts_at' => $seed['starts_at'],
+                        'ends_at' => $seed['ends_at'],
+                        'is_active' => $seed['is_active'],
+                        'discount_percent' => $seed['discount_percent'],
+                    ]
+                );
+
+                $patientIds = [];
+                foreach (($seed['patient_indexes'] ?? []) as $idx) {
+                    $patientIds[] = $patients[$idx % count($patients)]->id;
+                }
+
+                if (!empty($patientIds)) {
+                    $promotion->patients()->syncWithoutDetaching(array_values(array_unique($patientIds)));
+                }
+            }
+
+            // Seed analyses (анализы)
+            $analysisTypes = [
+                'Общий анализ крови',
+                'Биохимический анализ крови',
+                'Анализ мочи',
+                'Липидограмма',
+                'Тиреотропный гормон (ТТГ)',
+                'HbA1c (гликированный гемоглобин)',
+                'Глюкоза натощак',
+            ];
+
+            $analysisResults = [
+                'Показатели в целом соответствуют референсным значениям. Рекомендуется контроль в динамике.',
+                'Обнаружены отклонения по отдельным параметрам. Назначены дополнительные обследования.',
+                'Данные требуют клинической интерпретации с учетом симптомов. Показана консультация специалиста.',
+                'Результаты согласуются с предполагаемым диагнозом. Продолжайте лечение и соблюдайте рекомендации.',
+            ];
+
+            $analysisCount = min(12, count($patients) * 2);
+            for ($i = 0; $i < $analysisCount; $i++) {
+                $patient = $patients[$i % count($patients)];
+                $doctor = $doctors[$i % count($doctors)];
+                $type = $analysisTypes[$i % count($analysisTypes)];
+                $takenAt = now()->subDays(25 + $i);
+
+                Analysis::updateOrCreate(
+                    [
+                        'patient_id' => $patient->id,
+                        'doctor_id' => $doctor->id,
+                        'type' => $type,
+                    ],
+                    [
+                        'taken_at' => $takenAt->toDateString(),
+                        'file_path' => null,
+                        'result_text' => $analysisResults[$i % count($analysisResults)],
+                    ]
+                );
+            }
+        }
+
+        // Seed FAQ
+        $faqSeed = [
+            [
+                'question' => 'Как записаться на прием?',
+                'answer' => 'Выберите раздел “Запись” на сайте, затем специализацию, врача и удобную дату/время. Подтвердите заявку — администратор свяжется с вами.',
+                'is_active' => true,
+                'sort_order' => 0,
+            ],
+            [
+                'question' => 'Можно ли прикрепить результаты анализов?',
+                'answer' => 'Да. В личном кабинете (раздел “Мои анализы” или через врача) вы можете загрузить результаты и файлы, чтобы специалист быстрее сориентировался.',
+                'is_active' => true,
+                'sort_order' => 1,
+            ],
+            [
+                'question' => 'Как узнать стоимость приема?',
+                'answer' => 'Стоимость зависит от врача и специализации. В карточке врача указана базовая цена, а по активным акциям возможна скидка.',
+                'is_active' => true,
+                'sort_order' => 2,
+            ],
+            [
+                'question' => 'Я забыл(а) пароль. Что делать?',
+                'answer' => 'Используйте функцию восстановления в форме входа или обратитесь в поддержку. При необходимости администратор поможет восстановить доступ.',
+                'is_active' => true,
+                'sort_order' => 3,
+            ],
+        ];
+
+        foreach ($faqSeed as $faq) {
+            Faq::updateOrCreate(
+                ['question' => $faq['question']],
+                [
+                    'answer' => $faq['answer'],
+                    'is_active' => $faq['is_active'],
+                    'sort_order' => $faq['sort_order'],
+                ]
+            );
+        }
+
+        // Seed static pages (страницы сайта)
+        $pageSeed = [
+            [
+                'slug' => 'about',
+                'title' => 'О нас',
+                'content' => 'Наша клиника заботится о здоровье пациентов и использует современные методы диагностики и лечения. Мы стараемся, чтобы каждое обращение было понятным и комфортным.',
+            ],
+            [
+                'slug' => 'contacts',
+                'title' => 'Контакты',
+                'content' => 'Телефон: +7 (999) 123-45-67<br>Адрес: г. Москва, ул. Примерная, 1<br>График работы: ежедневно 09:00–20:00',
+            ],
+            [
+                'slug' => 'services',
+                'title' => 'Услуги',
+                'content' => 'Прием врачей по направлениям, лабораторные анализы, диагностика и сопровождение пациентов. Запись доступна на сайте и через администраторов.',
+            ],
+        ];
+
+        foreach ($pageSeed as $p) {
+            Page::updateOrCreate(
+                ['slug' => $p['slug']],
+                [
+                    'title' => $p['title'],
+                    'content' => $p['content'],
+                ]
+            );
+        }
+
+        // Seed chat threads + messages (чат)
+        $admin = User::where('email', 'admin@clinic.local')->first();
+        if ($admin && count($patients) > 0) {
+            $threadPatientIndexes = [0, 3];
+            foreach ($threadPatientIndexes as $idx) {
+                $patient = $patients[$idx % count($patients)];
+
+                $thread = ChatThread::firstOrCreate(
+                    ['patient_id' => $patient->id],
+                    ['admin_id' => $admin->id]
+                );
+
+                if ($thread->messages()->count() === 0) {
+                    ChatMessage::create([
+                        'thread_id' => $thread->id,
+                        'sender_id' => $patient->user_id,
+                        'message' => 'Здравствуйте! Хотел(а) бы записаться на прием. Подскажите, пожалуйста, ближайшие свободные даты.',
+                    ]);
+
+                    ChatMessage::create([
+                        'thread_id' => $thread->id,
+                        'sender_id' => $admin->id,
+                        'message' => 'Здравствуйте! Мы поможем с записью. Выберите направление/врача на сайте или оставьте удобное время — администратор подтвердит запись.',
+                    ]);
+                }
+            }
+        }
+
     }
 }

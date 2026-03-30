@@ -44,6 +44,7 @@
                 </select>
             </div>
 
+        <div class="clinic-form-row">
             <div class="clinic-form-group">
                 <label>Фамилия *</label>
                 <input type="text" name="last_name" value="{{ old('last_name') }}" required>
@@ -58,6 +59,7 @@
                 <label>Отчество</label>
                 <input type="text" name="middle_name" value="{{ old('middle_name') }}">
             </div>
+        </div>
 
             <div class="clinic-form-group">
                 <label>Стаж (лет) *</label>

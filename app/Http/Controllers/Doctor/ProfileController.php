@@ -47,6 +47,12 @@ class ProfileController extends Controller
             }
             $path = $request->file('avatar')->store('avatars/doctors', 'public');
             $data['avatar_path'] = 'storage/' . $path;
+        } elseif ($request->boolean('avatar_remove')) {
+            if ($doctor->avatar_path) {
+                $oldPath = str_replace('storage/', '', $doctor->avatar_path);
+                Storage::disk('public')->delete($oldPath);
+            }
+            $data['avatar_path'] = null;
         }
 
         $updateData = [

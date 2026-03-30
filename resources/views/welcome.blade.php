@@ -87,18 +87,12 @@
             @foreach($featuredDoctors as $doctor)
                 <article class="clinic-doctor-card">
                     <div class="clinic-doctor-avatar clinic-avatar clinic-avatar--md">
-                        @if ($doctor->avatar_path)
-                            <img
-                                class="clinic-img clinic-img--cover"
-                                src="{{ asset($doctor->avatar_path) }}"
-                                alt="Фото врача {{ $doctor->last_name }} {{ $doctor->first_name }}"
-                                loading="lazy"
-                            >
-                        @else
-                            <div class="avatar-placeholder">
-                                {{ mb_substr($doctor->last_name, 0, 1) }}{{ mb_substr($doctor->middle_name, 0, 1) }}
-                            </div>
-                        @endif
+                        <img
+                            class="clinic-img clinic-img--cover"
+                            src="{{ $doctor->avatar_path ? asset($doctor->avatar_path) : asset('images/startphotodoctor.png') }}"
+                            alt="Фото врача {{ $doctor->last_name }} {{ $doctor->first_name }}"
+                            loading="lazy"
+                        >
                     </div>
                     <h3>{{ $doctor->last_name }} {{ $doctor->first_name }} {{ $doctor->middle_name }}</h3>
                     <p class="clinic-doctor-specialty">{{ $doctor->specialization->name ?? '' }}</p>
@@ -155,7 +149,15 @@
                 <article class="clinic-review-card">
                     <div class="clinic-review-rating">★ {{ $review->rating }}/5</div>
                     <p class="clinic-review-text">{{ Str::limit($review->text, 150) ?: 'Пациент оставил положительный отзыв.' }}</p>
-                    <p class="clinic-review-doctor">Доктор {{ $review->doctor->last_name }} {{ $review->doctor->first_name }} · {{ $review->doctor->specialization->name ?? '' }}</p>
+                    <p class="clinic-review-doctor">
+                        <a href="{{ route('doctors.show', $review->doctor->id) }}">
+                            Доктор {{ $review->doctor->last_name }} {{ $review->doctor->first_name }}
+                        </a>
+                        ·
+                        <a href="{{ route('doctors.show', $review->doctor->id) }}">
+                            {{ $review->doctor->specialization->name ?? '' }}
+                        </a>
+                    </p>
                     <p class="clinic-review-author">{{ $review->patient->last_name }} {{ mb_substr($review->patient->first_name, 0, 1) }}.</p>
                 </article>
             @endforeach

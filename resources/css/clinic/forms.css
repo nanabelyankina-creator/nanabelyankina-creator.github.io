@@ -26,20 +26,38 @@
 .clinic-form input[type="text"],
 .clinic-form input[type="email"],
 .clinic-form input[type="password"],
+.clinic-form input[type="number"],
+.clinic-form input[type="date"],
 .clinic-form select,
 .clinic-form textarea {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1px solid var(--clinic-gray-border);
+  border: 1px solid #bfdbfe; /* синяя обводка в дефолте */
   border-radius: var(--clinic-radius);
   font-size: 1rem;
+  background: var(--clinic-white);
 }
 
-.clinic-form input:focus,
+.clinic-form input[type="text"]:focus,
+.clinic-form input[type="email"]:focus,
+.clinic-form input[type="password"]:focus,
+.clinic-form input[type="number"]:focus,
+.clinic-form input[type="date"]:focus,
 .clinic-form select:focus,
 .clinic-form textarea:focus {
   outline: none;
   border-color: var(--clinic-primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15); /* заметная blue outline */
+  background: var(--clinic-white);
+}
+
+.clinic-form input[type="text"]::placeholder,
+.clinic-form input[type="email"]::placeholder,
+.clinic-form input[type="password"]::placeholder,
+.clinic-form input[type="number"]::placeholder,
+.clinic-form input[type="date"]::placeholder,
+.clinic-form textarea::placeholder {
+  color: var(--clinic-gray-light);
 }
 
 .clinic-form .radio-group {
@@ -106,4 +124,42 @@
   padding: 1rem;
   border-radius: var(--clinic-radius);
   margin-bottom: 1rem;
+}
+
+/* Rounded blue checkboxes (универсально на сайте) */
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #bfdbfe; /* синяя оболочка */
+  background: var(--clinic-white);
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+input[type="checkbox"]:checked {
+  background: var(--clinic-primary);
+  border-color: var(--clinic-primary);
+}
+
+input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 10px;
+  border: 2px solid #ffffff;
+  border-top: 0;
+  border-left: 0;
+  transform: translate(-50%, -62%) rotate(45deg);
+}
+
+input[type="checkbox"]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.18);
 }

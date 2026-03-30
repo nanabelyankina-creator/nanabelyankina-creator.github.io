@@ -26,17 +26,31 @@
 
         <hr>
 
+        @php
+            $avg = $doctor->reviews()->avg('rating');
+            $avgRounded = (int) round($avg ?: 0);
+            $reviewsCount = $doctor->reviews()->count();
+        @endphp
+
+        @if($reviewsCount > 0)
+            <div class="doctor-rating-stars" aria-label="Средняя оценка: {{ $avgRounded }} из 5">
+                @for($i=1;$i<=5;$i++)
+                    <span class="doctor-rating-stars__star {{ $i <= $avgRounded ? 'is-active' : '' }}">★</span>
+                @endfor
+            </div>
+            <p class="clinic-text-muted" style="margin:0.35rem 0 1rem; font-size:0.9rem;">
+                Средняя оценка: {{ $avgRounded }}/5 ({{ $reviewsCount }} отзывов)
+            </p>
+        @endif
+
         <h2>Аватар</h2>
         <div class="doctor-profile-avatar clinic-avatar clinic-avatar--lg">
-            @if($doctor->avatar_path)
-                <img class="clinic-img clinic-img--cover" src="{{ asset($doctor->avatar_path) }}" alt="Аватар врача" loading="lazy">
-            @else
-                <picture class="clinic-picture">
-                    <source type="image/avif" srcset="{{ asset('images/doctor-placeholder.avif') }}">
-                    <source type="image/webp" srcset="{{ asset('images/doctor-placeholder.webp') }}">
-                    <img class="clinic-img clinic-img--cover" src="{{ file_exists(public_path('images/doctor-placeholder.jpeg')) ? asset('images/doctor-placeholder.jpeg') : 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=200&h=200&fit=crop' }}" alt="Аватар врача" loading="lazy">
-                </picture>
-            @endif
+            <img
+                class="clinic-img clinic-img--cover"
+                src="{{ $doctor->avatar_path ? asset($doctor->avatar_path) : asset('images/startphotodoctor.png') }}"
+                alt="Аватар врача"
+                loading="lazy"
+            >
         </div>
 
         <h2>Основная информация</h2>
@@ -49,35 +63,38 @@
 
         <h2>Редактируемые данные</h2>
 
-        <form action="{{ route('doctor.profile.update') }}" method="POST" enctype="multipart/form-data">
-    @csrf
+        <form action="{{ route('doctor.profile.update') }}" method="POST" enctype="multipart/form-data" class="clinic-form clinic-form--wide">
+            @csrf
 
-    <div>
-        <label>Фамилия *</label><br>
-        <input type="text" name="last_name" value="{{ old('last_name', $doctor->last_name) }}" required>
-    </div>
+            <div class="form-group">
+                <label>Фамилия *</label>
+                <input type="text" name="last_name" value="{{ old('last_name', $doctor->last_name) }}" required>
+            </div>
 
-    <div>
-        <label>Имя *</label><br>
-        <input type="text" name="first_name" value="{{ old('first_name', $doctor->first_name) }}" required>
-    </div>
+            <div class="form-group">
+                <label>Имя *</label>
+                <input type="text" name="first_name" value="{{ old('first_name', $doctor->first_name) }}" required>
+            </div>
 
-    <div>
-        <label>Отчество</label><br>
-        <input type="text" name="middle_name" value="{{ old('middle_name', $doctor->middle_name) }}">
-    </div>
-
-    <hr>
+            <div class="form-group">
+                <label>Отчество</label>
+                <input type="text" name="middle_name" value="{{ old('middle_name', $doctor->middle_name) }}">
+            </div>
 
             <div class="form-group">
                 <label>Загрузить новое фото (аватар)</label>
                 <input type="file" name="avatar" accept="image/jpeg,image/png,image/jpg,image/gif">
+                <label class="form-checkbox" style="margin-top:0.5rem;">
+                    <input type="checkbox" name="avatar_remove" value="1">
+                    <span>Удалить текущую фотографию и использовать стандартную</span>
+                </label>
             </div>
 
-            <h3>О себе</h3>
-            <textarea name="about" rows="6" cols="60">{{ old('about', $doctor->about) }}</textarea>
+            <div class="form-group">
+                <label>О себе</label>
+                <textarea name="about" rows="6">{{ old('about', $doctor->about) }}</textarea>
+            </div>
 
-            <br><br>
             <button type="submit" class="clinic-btn btn-primary">Сохранить изменения</button>
         </form>
 
@@ -98,9 +115,9 @@
             <p>Образование добавляется администратором.</p>
         @endif
 
-        <form action="{{ route('logout') }}" method="POST" style="margin-top:20px;">
+        <form action="{{ route('logout') }}" method="POST" style="margin-top:20px;" class="clinic-logout-form">
             @csrf
-            <button type="submit" class="clinic-btn clinic-btn-secondary">Выйти</button>
+            <button type="submit" class="clinic-btn clinic-btn-secondary clinic-btn-sm clinic-logout-btn">Выйти</button>
         </form>
     </div>
 </section>

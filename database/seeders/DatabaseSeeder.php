@@ -13,11 +13,7 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        $this->call([
-            SpecializationSeeder::class,
-            ClinicDataSeeder::class,
-        ]);
-        
+        // Admin нужен до сидинга чата/других связанных данных
         User::updateOrCreate(
             ['email' => 'admin@clinic.local'],
             [
@@ -27,5 +23,10 @@ class DatabaseSeeder extends Seeder
                 'is_blocked' => false,
             ]
         );
+
+        $this->call([
+            SpecializationSeeder::class,
+            ClinicDataSeeder::class,
+        ]);
     }
 }

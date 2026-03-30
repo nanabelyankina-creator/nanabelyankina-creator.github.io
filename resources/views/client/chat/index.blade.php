@@ -45,6 +45,7 @@
                     <div class="clinic-chat-input-row">
                         <div class="clinic-chat-input-wrap">
                             <textarea
+                                class="clinic-chat-textarea"
                                 name="message"
                                 rows="2"
                                 placeholder="Ваш вопрос..."
@@ -60,3 +61,28 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+(function() {
+    const textarea = document.querySelector('.clinic-chat-textarea');
+    if (!textarea) return;
+
+    const MAX_HEIGHT_PX = 160;
+
+    function autoResize() {
+        textarea.style.height = 'auto';
+        const scrollHeight = textarea.scrollHeight;
+        const height = Math.min(scrollHeight, MAX_HEIGHT_PX);
+        textarea.style.height = height + 'px';
+        textarea.style.overflowY = scrollHeight > MAX_HEIGHT_PX ? 'auto' : 'hidden';
+    }
+
+    textarea.addEventListener('input', autoResize);
+    textarea.addEventListener('change', autoResize);
+
+    // Initial
+    autoResize();
+})();
+</script>
+@endpush

@@ -12,10 +12,13 @@
 .profile-edit-btn,
 .clinic-btn-secondary,
 .clinic-btn-sm,
-.appointments-tab:not(.active),
+.appointments-tab,
 .clinic-feature-card,
 .clinic-doctor-card,
-.clinic-review-card {
+.clinic-review-card,
+.clinic-admin-nav a,
+.clinic-admin-logout button,
+.clinic-logout-btn {
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
   transform-origin: center center;
 }
@@ -26,7 +29,11 @@
 .clinic-search-btn:hover,
 .clinic-form .btn-primary:hover,
 .clinic-doctor-card .clinic-btn:hover,
-.clinic-doctors-toolbar .clinic-btn:hover {
+.clinic-doctors-toolbar .clinic-btn:hover,
+.appointments-tab:hover,
+.clinic-admin-nav a:hover,
+.clinic-admin-logout button:hover,
+.clinic-logout-btn:hover {
   transform: scale(1.05);
 }
 
@@ -50,4 +57,37 @@
 .clinic-doctor-card:hover,
 .clinic-review-card:hover {
   transform: scale(1.02);
+}
+
+/* Star rating widget (интерактивные 5 звёзд) */
+.clinic-star-widget {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.clinic-star-widget .clinic-star {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: #cbd5e1; /* серые звёзды */
+  transition: transform 0.1s ease, color 0.1s ease;
+}
+
+.clinic-star-widget .clinic-star:hover {
+  transform: translateY(-1px);
+}
+
+.clinic-star-widget .clinic-star.is-active {
+  color: var(--clinic-accent);
+}
+
+.clinic-star-widget .clinic-star:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25);
+  border-radius: 6px;
 }

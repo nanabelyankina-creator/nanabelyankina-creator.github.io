@@ -11,7 +11,7 @@
         @else
             <div style="display:flex;flex-direction:column;gap:1.5rem;margin-top:1.5rem;">
                 @foreach($promotions as $promo)
-                    <article style="padding:1.5rem;border:1px solid var(--clinic-gray-border);border-radius:var(--clinic-radius);">
+                    <article class="clinic-blue-card">
                         <h3 style="margin:0 0 0.5rem;">{{ $promo->title }}</h3>
                         @if($promo->short_description)
                             <p style="margin:0 0 0.5rem;color:var(--clinic-gray);">{{ $promo->short_description }}</p>

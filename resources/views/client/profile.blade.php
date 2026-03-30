@@ -5,6 +5,48 @@
     <div class="clinic-container">
         <h1>Личный кабинет</h1>
 
+        @php $avatarPath = $user->avatar_path ?? null; @endphp
+        <div class="clinic-blue-card" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;margin-top:1rem;">
+            <div style="display:flex;align-items:center;gap:1rem;">
+                <div class="clinic-avatar clinic-avatar--lg" style="width:110px;height:110px;">
+                    @if($avatarPath)
+                        <img
+                            class="clinic-img clinic-img--cover"
+                            src="{{ asset($avatarPath) }}"
+                            alt="Аватар пользователя"
+                            loading="lazy"
+                        >
+                    @else
+                        {{-- Дефолтная аватарка: круг + плечи --}}
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <circle cx="100" cy="100" r="95" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="6"/>
+                            <circle cx="100" cy="78" r="38" fill="#2563EB"/>
+                            <path d="M35 170c10-45 45-70 65-70s55 25 65 70" fill="#2563EB"/>
+                        </svg>
+                    @endif
+                </div>
+                <div>
+                    <div style="font-weight:800;margin-bottom:0.25rem;">Аватар</div>
+                    <div style="color:var(--clinic-gray);font-size:0.9rem;">Можно загрузить изображение или удалить — вернётся стандартная.</div>
+                </div>
+            </div>
+
+            <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
+                <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" style="display:flex;gap:0.75rem;align-items:center;">
+                    @csrf
+                    <input type="file" name="avatar" accept="image/*" id="avatar-file" style="display:none;">
+                    <label for="avatar-file" class="clinic-btn clinic-btn--primary">Выберите файл</label>
+                    <button type="submit" class="clinic-btn clinic-btn--primary">Сохранить</button>
+                </form>
+
+                <form action="{{ route('profile.update') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="avatar_remove" value="1">
+                    <button type="submit" class="clinic-btn clinic-btn--ghost">Удалить</button>
+                </form>
+            </div>
+        </div>
+
         @if(session('success'))
             <div class="clinic-alert-success">{{ session('success') }}</div>
         @endif
@@ -126,9 +168,9 @@
 
         <p style="margin-top:2rem;">
             <a href="{{ route('client.chat.index') }}">Связаться по чату</a> ·
-            <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+            <form action="{{ route('logout') }}" method="POST" class="clinic-logout-form">
                 @csrf
-                <button type="submit" style="background:none;border:none;color:var(--clinic-primary);cursor:pointer;font:inherit;padding:0;">Выйти</button>
+                <button type="submit" class="clinic-btn clinic-btn-secondary clinic-btn-sm clinic-logout-btn">Выйти</button>
             </form>
         </p>
     </div>

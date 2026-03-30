@@ -25,6 +25,13 @@ body.clinic-body {
 
 .clinic-main {
   flex: 1;
+  padding-top: 110px; /* чтобы контент не прятался под фиксированной шапкой */
+}
+
+@media (min-width: 768px) {
+  .clinic-main {
+    padding-top: 96px;
+  }
 }
 
 img {

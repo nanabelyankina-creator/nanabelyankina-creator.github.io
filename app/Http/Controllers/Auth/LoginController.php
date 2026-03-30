@@ -53,6 +53,13 @@ class LoginController extends Controller
             } else {
                 $snils = \App\Services\SnilsValidator::normalize($data['identifier']);
                 $patient = Patient::where('snils', $snils)->first();
+
+                // Поддерживаем старые записи, где СНИЛС мог храниться с разделителями.
+                if (!$patient) {
+                    $snilsFormatted = \App\Services\SnilsValidator::format($snils);
+                    $patient = Patient::where('snils', $snilsFormatted)->first();
+                }
+
                 if ($patient) {
                     $user = $patient->user;
                 }

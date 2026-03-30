@@ -3,7 +3,6 @@
 @section('admin-content')
     <div class="clinic-admin-header">
         <h1>Чат с клиентом</h1>
-        <p class="clinic-admin-subtitle">Переписка с пациентами в режиме реального времени.</p>
     </div>
 
     <div class="clinic-chat-layout">
@@ -59,9 +58,32 @@
 
             <form action="{{ route('admin.chat.send', $thread) }}" method="POST" class="clinic-chat-form">
                 @csrf
-                <textarea name="message" rows="3" placeholder="Сообщение клиенту..." required></textarea>
+                <textarea class="clinic-chat-textarea" name="message" rows="3" placeholder="Сообщение клиенту..." required></textarea>
                 <button type="submit" class="clinic-btn clinic-btn--primary">Отправить</button>
             </form>
         </section>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+(function() {
+    const textarea = document.querySelector('.clinic-chat-textarea');
+    if (!textarea) return;
+
+    const MAX_HEIGHT_PX = 160;
+
+    function autoResize() {
+        textarea.style.height = 'auto';
+        const scrollHeight = textarea.scrollHeight;
+        const height = Math.min(scrollHeight, MAX_HEIGHT_PX);
+        textarea.style.height = height + 'px';
+        textarea.style.overflowY = scrollHeight > MAX_HEIGHT_PX ? 'auto' : 'hidden';
+    }
+
+    textarea.addEventListener('input', autoResize);
+    textarea.addEventListener('change', autoResize);
+    autoResize();
+})();
+</script>
+@endpush
