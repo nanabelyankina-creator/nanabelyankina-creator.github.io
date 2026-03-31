@@ -63,6 +63,84 @@
 
     @include('partials.clinic.footer')
 
+    <script>
+    (function() {
+        function digits(v) { return String(v || '').replace(/\D/g, ''); }
+
+        function formatPhoneRu(raw) {
+            var v = digits(raw);
+            if (!v) return '';
+            if (v[0] === '8') v = '7' + v.slice(1);
+            if (v[0] !== '7') v = '7' + v;
+            if (v.length > 11) v = v.slice(0, 11);
+
+            var out = '+7';
+            if (v.length > 1) out += ' (' + v.slice(1, 4);
+            if (v.length > 4) out += ') ' + v.slice(4, 7);
+            if (v.length > 7) out += '-' + v.slice(7, 9);
+            if (v.length > 9) out += '-' + v.slice(9, 11);
+            return out;
+        }
+
+        function formatSnils(raw) {
+            var v = digits(raw);
+            if (!v) return '';
+            if (v.length > 11) v = v.slice(0, 11);
+            var out = '';
+            if (v.length > 0) out += v.slice(0, 3);
+            if (v.length > 3) out += '-' + v.slice(3, 6);
+            if (v.length > 6) out += '-' + v.slice(6, 9);
+            if (v.length > 9) out += ' ' + v.slice(9, 11);
+            return out;
+        }
+
+        function bindMask(el, formatter) {
+            if (!el) return;
+            var handler = function() {
+                var next = formatter(el.value);
+                el.value = next;
+            };
+            el.addEventListener('input', handler);
+            el.addEventListener('blur', handler);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // phone
+            document.querySelectorAll('[data-mask="phone-ru"], input[name="phone"], #phone').forEach(function(el) {
+                bindMask(el, formatPhoneRu);
+            });
+
+            // snils
+            document.querySelectorAll('[data-mask="snils"], input[name="snils"], #snils').forEach(function(el) {
+                bindMask(el, formatSnils);
+            });
+
+            // login identifier: phone/snils depending on selected radio
+            var identifier = document.getElementById('identifier');
+            var radios = document.querySelectorAll('input[name="login_type"]');
+            if (identifier && radios && radios.length) {
+                function currentType() {
+                    var checked = document.querySelector('input[name="login_type"]:checked');
+                    return checked ? checked.value : 'phone';
+                }
+                function applyIdentifierMask() {
+                    var t = currentType();
+                    if (t === 'snils') {
+                        identifier.placeholder = 'XXX-XXX-XXX XX';
+                        identifier.value = formatSnils(identifier.value);
+                    } else {
+                        identifier.placeholder = '+7 (999) 123-45-67';
+                        identifier.value = formatPhoneRu(identifier.value);
+                    }
+                }
+                identifier.addEventListener('input', applyIdentifierMask);
+                radios.forEach(function(r) { r.addEventListener('change', applyIdentifierMask); });
+                applyIdentifierMask();
+            }
+        });
+    })();
+    </script>
+
     @stack('scripts')
 </body>
 </html>

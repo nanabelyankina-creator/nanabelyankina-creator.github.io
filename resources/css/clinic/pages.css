@@ -1,6 +1,6 @@
 .clinic-blue-card {
   padding: 1.5rem;
-  border: 1px solid #bfdbfe;
+  border: 2px solid #bfdbfe;
   border-radius: var(--clinic-radius);
   background: var(--clinic-white);
   transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;

@@ -4,7 +4,6 @@
 <section class="clinic-page">
     <div class="clinic-container">
         <h1>{{ $page->title }}</h1>
-        <p><a href="{{ route('home') }}" style="color:var(--clinic-primary);">← На главную</a></p>
 
         @php
             $pageContent = $page->content ?: 'Содержимое страницы пока не добавлено.';

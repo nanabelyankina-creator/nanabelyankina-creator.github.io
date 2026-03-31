@@ -66,6 +66,12 @@
                 @if(auth()->check() && auth()->user()->isPatient())
                     <a href="{{ route('profile') }}">Личный кабинет</a>
                 @endif
+                @guest
+                    <div class="clinic-mobile-auth">
+                        <a href="{{ route('login') }}" class="clinic-mobile-auth-btn">Вход</a>
+                        <a href="{{ route('register.show') }}" class="clinic-mobile-auth-btn">Регистрация</a>
+                    </div>
+                @endguest
                 <a href="{{ auth()->check() && auth()->user()->isPatient() ? route('client.book.specialization') : route('guest.book.patient') }}" class="clinic-nav-btn" style="text-align:center;">Записаться к врачу</a>
             </div>
         </div>

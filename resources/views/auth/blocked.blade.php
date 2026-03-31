@@ -33,9 +33,6 @@
             ></iframe>
         @endif
 
-        <p style="margin-top:1.5rem;">
-            <a href="{{ route('home') }}" class="clinic-btn">На главную</a>
-        </p>
     </div>
 </section>
 @endsection

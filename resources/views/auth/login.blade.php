@@ -39,7 +39,7 @@
                 </div>
                 <div class="form-group">
                     <label>Телефон или СНИЛС *</label>
-                    <input type="text" name="identifier" id="identifier" value="{{ old('identifier') }}">
+                    <input type="text" name="identifier" id="identifier" value="{{ old('identifier') }}" data-mask="phone-or-snils">
                 </div>
             </div>
 
@@ -53,7 +53,14 @@
 
             <div class="form-group">
                 <label>Пароль *</label>
-                <input type="password" name="password" required>
+                <input type="password" name="password" required data-password>
+            </div>
+
+            <div class="form-group">
+                <label style="display:flex;align-items:center;gap:0.5rem;">
+                    <input type="checkbox" data-toggle-password>
+                    Показать пароль
+                </label>
             </div>
 
             <div class="form-group">
@@ -115,6 +122,15 @@
             if (backToClientLink) backToClientLink.addEventListener('click', function(e) { e.preventDefault(); showClientForm(); });
 
             if (isStaff) showStaffForm(); else showClientForm();
+
+            // show/hide password
+            var toggle = form?.querySelector('[data-toggle-password]');
+            var pw = form?.querySelector('input[name="password"][data-password]');
+            if (toggle && pw) {
+                toggle.addEventListener('change', function() {
+                    pw.type = this.checked ? 'text' : 'password';
+                });
+            }
         })();
         </script>
 

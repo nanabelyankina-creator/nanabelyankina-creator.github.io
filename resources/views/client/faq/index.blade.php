@@ -4,7 +4,6 @@
 <section class="clinic-page">
     <div class="clinic-container">
         <h1>Ответы на вопросы</h1>
-        <p><a href="{{ route('home') }}" style="color:var(--clinic-primary);">← На главную</a></p>
 
         @if($faqs->isEmpty())
             <p>Пока нет вопросов.</p>
@@ -44,13 +43,35 @@
         const answer = item.querySelector('.clinic-faq-answer');
         if (!btn || !answer) return;
 
-        btn.addEventListener('click', function() {
-            const isOpen = item.classList.toggle('is-open');
-            btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        function closeAnswer() {
+            answer.style.height = answer.scrollHeight + 'px';
+            answer.offsetHeight; // force reflow
+            answer.style.height = '0px';
+            item.classList.remove('is-open');
+            btn.setAttribute('aria-expanded', 'false');
+        }
 
-            const caretSvgPath = item.querySelector('.clinic-faq-caret svg path');
-            // Меняем поворот треугольника через CSS (класс is-open достаточно)
+        function openAnswer() {
+            item.classList.add('is-open');
+            btn.setAttribute('aria-expanded', 'true');
+            answer.style.height = answer.scrollHeight + 'px';
+            const onEnd = function(e) {
+                if (e.propertyName !== 'height') return;
+                answer.style.height = 'auto';
+                answer.removeEventListener('transitionend', onEnd);
+            };
+            answer.addEventListener('transitionend', onEnd);
+        }
+
+        btn.addEventListener('click', function() {
+            const isOpen = item.classList.contains('is-open');
+            if (isOpen) closeAnswer();
+            else openAnswer();
         });
+
+        // ensure initial state is closed
+        answer.style.height = '0px';
+        btn.setAttribute('aria-expanded', 'false');
     });
 })();
 </script>

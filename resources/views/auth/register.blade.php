@@ -35,12 +35,12 @@
 
             <div class="form-group">
                 <label>СНИЛС *</label>
-                <input type="text" name="snils" id="snils" value="{{ old('snils') }}" placeholder="XXX-XXX-XXX XX" maxlength="14" required>
+                <input type="text" name="snils" id="snils" value="{{ old('snils') }}" placeholder="XXX-XXX-XXX XX" maxlength="14" required data-mask="snils">
             </div>
 
             <div class="form-group">
                 <label>Телефон *</label>
-                <input type="text" name="phone" id="phone" value="{{ old('phone') }}" placeholder="+7 (999) 123-45-67" required>
+                <input type="text" name="phone" id="phone" value="{{ old('phone') }}" placeholder="+7 (999) 123-45-67" required data-mask="phone-ru">
             </div>
 
             <div class="form-group">
@@ -50,12 +50,19 @@
 
             <div class="form-group">
                 <label>Пароль *</label>
-                <input type="password" name="password" required>
+                <input type="password" name="password" required data-password>
             </div>
 
             <div class="form-group">
                 <label>Повтор пароля *</label>
-                <input type="password" name="password_confirmation" required>
+                <input type="password" name="password_confirmation" required data-password>
+            </div>
+
+            <div class="form-group">
+                <label style="display:flex;align-items:center;gap:0.5rem;">
+                    <input type="checkbox" data-toggle-password>
+                    Показать пароль
+                </label>
             </div>
 
             <div class="form-group">
@@ -74,32 +81,14 @@
 @push('scripts')
 <script>
 (function() {
-    var snils = document.getElementById('snils');
-    if (snils) {
-        snils.addEventListener('input', function() {
-            var v = this.value.replace(/\D/g, '');
-            if (v.length > 11) v = v.slice(0, 11);
-            var f = '';
-            if (v.length > 0) f += v.slice(0, 3);
-            if (v.length > 3) f += '-' + v.slice(3, 6);
-            if (v.length > 6) f += '-' + v.slice(6, 9);
-            if (v.length > 9) f += ' ' + v.slice(9, 11);
-            this.value = f;
-        });
-    }
-    var phone = document.getElementById('phone');
-    if (phone) {
-        phone.addEventListener('input', function() {
-            var v = this.value.replace(/\D/g, '');
-            if (v[0] === '8') v = '7' + v.slice(1);
-            if (v[0] !== '7') v = '7' + v;
-            if (v.length > 11) v = v.slice(0, 11);
-            var f = '+7';
-            if (v.length > 1) f += ' (' + v.slice(1, 4);
-            if (v.length > 4) f += ') ' + v.slice(4, 7);
-            if (v.length > 7) f += '-' + v.slice(7, 9);
-            if (v.length > 9) f += '-' + v.slice(9, 11);
-            this.value = f;
+    var form = document.querySelector('form.clinic-form');
+    var toggle = form?.querySelector('[data-toggle-password]');
+    var pws = form ? Array.from(form.querySelectorAll('[data-password]')) : [];
+    if (toggle && pws.length) {
+        toggle.addEventListener('change', function() {
+            pws.forEach(function(pw) {
+                pw.type = toggle.checked ? 'text' : 'password';
+            });
         });
     }
 })();

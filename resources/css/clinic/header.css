@@ -1,10 +1,6 @@
 .clinic-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: static;
   width: 100%;
-  z-index: 1000;
 }
 
 .clinic-topbar {
@@ -46,6 +42,8 @@
 .clinic-nav {
   background-color: var(--clinic-white);
   box-shadow: var(--clinic-shadow);
+  position: relative;
+  z-index: 2000;
 }
 
 .clinic-nav-inner {
@@ -121,6 +119,7 @@
   background-color: var(--clinic-white);
   box-shadow: var(--clinic-shadow-lg);
   padding: 1rem;
+  z-index: 2001;
 }
 
 .clinic-mobile-menu.is-open {
@@ -139,7 +138,54 @@
   border-bottom: none;
 }
 
+@media (max-width: 767.98px) {
+  .clinic-topbar {
+    display: none;
+  }
+
+  .clinic-mobile-auth {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+    margin-top: 0.25rem;
+    border-top: 1px solid var(--clinic-gray-border);
+  }
+
+  .clinic-mobile-auth-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    padding: 0 1rem;
+    border-radius: 40px;
+    border: 1px solid #dbeafe;
+    background: #eff6ff;
+    color: var(--clinic-primary);
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .clinic-mobile-auth-btn:hover {
+    background: #dbeafe;
+  }
+
+  .clinic-mobile-menu a.clinic-nav-btn {
+    border-bottom: none;
+  }
+}
+
 @media (min-width: 768px) {
+  .clinic-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+
   .clinic-hamburger {
     display: none;
   }

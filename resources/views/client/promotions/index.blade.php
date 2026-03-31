@@ -4,7 +4,6 @@
 <section class="clinic-page">
     <div class="clinic-container">
         <h1>Акции</h1>
-        <p><a href="{{ route('home') }}" style="color:var(--clinic-primary);">← На главную</a></p>
 
         @if($promotions->isEmpty())
             <p>Акций пока нет.</p>
