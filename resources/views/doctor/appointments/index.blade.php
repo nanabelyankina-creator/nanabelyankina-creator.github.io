@@ -21,13 +21,25 @@
 
         {{-- Основной контент --}}
         <div class="doctor-content">
-            <h1>Мои записи на {{ $currentDate->format('d.m.Y') }}</h1>
+            <div class="doctor-page-head">
+                <h1>Мои записи на {{ $currentDate->format('d.m.Y') }}</h1>
+                <p class="clinic-text-muted">
+                    Врач: {{ $doctor->last_name }} {{ $doctor->first_name }} {{ $doctor->middle_name }}
+                </p>
+            </div>
 
             @if(session('success'))
                 <div class="clinic-alert-success">{{ session('success') }}</div>
             @endif
-
-            <p>Врач: {{ $doctor->last_name }} {{ $doctor->first_name }} {{ $doctor->middle_name }}</p>
+            @if ($errors->any())
+                <div class="clinic-alert-error">
+                    <ul class="clinic-alert-error__list">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             <form method="GET" action="{{ route('doctor.appointments.index') }}" class="doctor-filters">
                 <div class="doctor-filters-row">
@@ -41,11 +53,9 @@
                         <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Введите ФИО">
                     </label>
 
-                    <button type="submit" class="clinic-btn">Показать</button>
+                    <button type="submit" class="clinic-btn">Фильтровать</button>
                 </div>
             </form>
-
-            <hr>
 
             <div class="doctor-slots-list">
                 @foreach($timeSlots as $slot)
@@ -63,12 +73,16 @@
                                     {{ $appointment->patient->middle_name ?? '' }}
                                 </p>
                                 <p><strong>Телефон:</strong> {{ $appointment->patient->user->phone ?? $appointment->patient->phone ?? 'не указан' }}</p>
-                                <p>
-                                    <a href="{{ route('doctor.appointments.reappointment', $appointment) }}">Повторно записать</a>
+                                <div class="doctor-appointment-card__actions">
+                                    <a href="{{ route('doctor.appointments.reappointment', $appointment) }}" class="clinic-btn clinic-btn--ghost">
+                                        Повторно записать
+                                    </a>
                                     @if($appointment->patient)
-                                        | <a href="{{ route('doctor.appointments.analyses', $appointment) }}">Анализы пациента</a>
+                                        <a href="{{ route('doctor.appointments.analyses', $appointment) }}" class="clinic-btn clinic-btn--ghost">
+                                            Анализы пациента
+                                        </a>
                                     @endif
-                                </p>
+                                </div>
                                 <form action="{{ route('doctor.appointments.updateStatus', $appointment) }}" method="POST" class="doctor-status-form">
                                     @csrf
                                     <select name="status">
@@ -79,6 +93,34 @@
                                     </select>
                                     <button type="submit" class="clinic-btn clinic-btn-sm">Обновить статус</button>
                                 </form>
+
+                                @if($appointment->patient && $appointment->status === 'completed')
+                                    <details class="doctor-analysis-create">
+                                        <summary>Добавить анализ пациенту</summary>
+                                        <form action="{{ route('doctor.appointments.analyses.store', $appointment) }}" method="POST" enctype="multipart/form-data" class="doctor-analysis-create__form">
+                                            @csrf
+                                            <div class="doctor-analysis-create__grid">
+                                                <label>
+                                                    Тип анализа *
+                                                    <input type="text" name="analysis_type" value="{{ old('analysis_type') }}" required>
+                                                </label>
+                                                <label>
+                                                    Дата сдачи
+                                                    <input type="date" name="analysis_taken_at" value="{{ old('analysis_taken_at', optional($appointment->scheduled_at)->toDateString()) }}">
+                                                </label>
+                                            </div>
+                                            <label>
+                                                Текст результата
+                                                <textarea name="analysis_result_text" rows="3" placeholder="Краткое описание результата">{{ old('analysis_result_text') }}</textarea>
+                                            </label>
+                                            <label>
+                                                Файл анализа (опционально)
+                                                <input type="file" name="analysis_file" accept=".pdf,image/*">
+                                            </label>
+                                            <button type="submit" class="clinic-btn clinic-btn-sm">Сохранить анализ</button>
+                                        </form>
+                                    </details>
+                                @endif
                             </div>
                         </div>
                     @else

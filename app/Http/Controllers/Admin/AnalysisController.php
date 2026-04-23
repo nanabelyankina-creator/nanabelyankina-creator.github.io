@@ -7,6 +7,8 @@ use App\Models\Analysis;
 use App\Models\Doctor;
 use App\Models\Patient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class AnalysisController extends Controller
 {
@@ -48,10 +50,25 @@ class AnalysisController extends Controller
             'type'        => ['required', 'string', 'max:255'],
             'taken_at'    => ['nullable', 'date'],
             'result_text' => ['nullable', 'string'],
-            'file_path'   => ['nullable', 'string', 'max:255'],
+            'analysis_file' => ['nullable', 'file', 'max:10240', 'mimes:pdf,jpg,jpeg,png,webp'],
         ]);
 
-        Analysis::create($data);
+        $analysis = Analysis::create([
+            'patient_id'  => $data['patient_id'],
+            'doctor_id'   => $data['doctor_id'] ?? null,
+            'type'        => $data['type'],
+            'taken_at'    => $data['taken_at'] ?? null,
+            'result_text' => $data['result_text'] ?? null,
+        ]);
+
+        if ($request->hasFile('analysis_file')) {
+            File::ensureDirectoryExists(public_path('uploads/analyses'));
+            $ext = $request->file('analysis_file')->getClientOriginalExtension() ?: 'pdf';
+            $filename = 'analysis_' . $analysis->id . '_' . Str::random(8) . '.' . $ext;
+            $request->file('analysis_file')->move(public_path('uploads/analyses'), $filename);
+
+            $analysis->update(['file_path' => 'uploads/analyses/' . $filename]);
+        }
 
         return redirect()
             ->route('admin.analyses.index')
@@ -74,10 +91,30 @@ class AnalysisController extends Controller
             'type'        => ['required', 'string', 'max:255'],
             'taken_at'    => ['nullable', 'date'],
             'result_text' => ['nullable', 'string'],
-            'file_path'   => ['nullable', 'string', 'max:255'],
+            'analysis_file' => ['nullable', 'file', 'max:10240', 'mimes:pdf,jpg,jpeg,png,webp'],
         ]);
 
-        $analysis->update($data);
+        $analysis->update([
+            'patient_id'  => $data['patient_id'],
+            'doctor_id'   => $data['doctor_id'] ?? null,
+            'type'        => $data['type'],
+            'taken_at'    => $data['taken_at'] ?? null,
+            'result_text' => $data['result_text'] ?? null,
+        ]);
+
+        if ($request->hasFile('analysis_file')) {
+            // удаляем старый файл (если он был загружен нами в public storage)
+            if ($analysis->file_path && str_starts_with($analysis->file_path, 'uploads/')) {
+                @unlink(public_path($analysis->file_path));
+            }
+
+            File::ensureDirectoryExists(public_path('uploads/analyses'));
+            $ext = $request->file('analysis_file')->getClientOriginalExtension() ?: 'pdf';
+            $filename = 'analysis_' . $analysis->id . '_' . Str::random(8) . '.' . $ext;
+            $request->file('analysis_file')->move(public_path('uploads/analyses'), $filename);
+
+            $analysis->update(['file_path' => 'uploads/analyses/' . $filename]);
+        }
 
         return redirect()
             ->route('admin.analyses.index')
@@ -86,6 +123,10 @@ class AnalysisController extends Controller
 
     public function destroy(Analysis $analysis)
     {
+        if ($analysis->file_path && str_starts_with($analysis->file_path, 'uploads/')) {
+            @unlink(public_path($analysis->file_path));
+        }
+
         $analysis->delete();
 
         return redirect()

@@ -1,9 +1,5 @@
 @extends('layouts.clinic')
 
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('css/client-chat.css') }}">
-@endpush
-
 @section('content')
     <div class="clinic-chat-page">
         <div class="clinic-chat-page__inner">

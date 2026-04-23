@@ -12,6 +12,18 @@
   border-color: rgba(37, 99, 235, 0.45);
 }
 
+/* Doctor profile avatar card should stay static */
+.doctor-profile-page .doctor-profile-avatar-card {
+  border: 1px solid var(--clinic-gray-border);
+  transition: none;
+}
+
+.doctor-profile-page .doctor-profile-avatar-card:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--clinic-gray-border);
+}
+
 /* About slider */
 .clinic-about-slider {
   margin-top: 1.5rem;

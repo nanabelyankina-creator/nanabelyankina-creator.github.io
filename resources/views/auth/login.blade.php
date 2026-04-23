@@ -26,14 +26,14 @@
             <div id="login-client-fields" class="login-as-fields">
                 <div class="form-group">
                     <label>Способ входа:</label>
-                    <div class="radio-group">
-                        <label>
+                    <div class="login-type-switch" role="radiogroup" aria-label="Способ входа">
+                        <label class="login-type-switch__item">
                             <input type="radio" name="login_type" value="phone" {{ old('login_type', 'phone') === 'phone' ? 'checked' : '' }}>
-                            По телефону
+                            <span>По телефону</span>
                         </label>
-                        <label>
+                        <label class="login-type-switch__item">
                             <input type="radio" name="login_type" value="snils" {{ old('login_type') === 'snils' ? 'checked' : '' }}>
-                            По СНИЛС
+                            <span>По СНИЛС</span>
                         </label>
                     </div>
                 </div>
@@ -122,6 +122,20 @@
             if (backToClientLink) backToClientLink.addEventListener('click', function(e) { e.preventDefault(); showClientForm(); });
 
             if (isStaff) showStaffForm(); else showClientForm();
+
+            function syncLoginTypeButtons() {
+                var selected = form.querySelector('input[name="login_type"]:checked');
+                var selectedValue = selected ? selected.value : 'phone';
+                form.querySelectorAll('.login-type-switch__item').forEach(function(item) {
+                    var radio = item.querySelector('input[name="login_type"]');
+                    item.classList.toggle('is-active', !!radio && radio.value === selectedValue);
+                });
+            }
+
+            form.querySelectorAll('input[name="login_type"]').forEach(function(radio) {
+                radio.addEventListener('change', syncLoginTypeButtons);
+            });
+            syncLoginTypeButtons();
 
             // show/hide password
             var toggle = form?.querySelector('[data-toggle-password]');

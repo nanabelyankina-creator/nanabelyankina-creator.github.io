@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Rules\RussianPhone;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
@@ -73,17 +75,21 @@ class ProfileController extends Controller
 
         // Аватар пользователя (для клиентов)
         if ($request->hasFile('avatar')) {
-            if ($user->avatar_path) {
-                $oldPath = str_replace('storage/', '', $user->avatar_path);
-                Storage::disk('public')->delete($oldPath);
+            // Храним файлы в public/uploads, чтобы не зависеть от storage:link на Windows.
+            if ($user->avatar_path && str_starts_with($user->avatar_path, 'uploads/')) {
+                @unlink(public_path($user->avatar_path));
             }
 
-            $path = $request->file('avatar')->store('avatars/users', 'public');
-            $userData['avatar_path'] = 'storage/' . $path;
+            File::ensureDirectoryExists(public_path('uploads/avatars/users'));
+
+            $ext = $request->file('avatar')->getClientOriginalExtension() ?: 'jpg';
+            $filename = 'user_' . $user->id . '_' . Str::random(8) . '.' . $ext;
+            $request->file('avatar')->move(public_path('uploads/avatars/users'), $filename);
+
+            $userData['avatar_path'] = 'uploads/avatars/users/' . $filename;
         } elseif ($request->boolean('avatar_remove')) {
-            if ($user->avatar_path) {
-                $oldPath = str_replace('storage/', '', $user->avatar_path);
-                Storage::disk('public')->delete($oldPath);
+            if ($user->avatar_path && str_starts_with($user->avatar_path, 'uploads/')) {
+                @unlink(public_path($user->avatar_path));
             }
             $userData['avatar_path'] = null;
         }

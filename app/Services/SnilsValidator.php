@@ -17,11 +17,22 @@ class SnilsValidator
             return false;
         }
 
+        // Базовая защита от очевидно "пустых" значений.
+        if (substr($digits, 0, 9) === '000000000') {
+            return false;
+        }
+
+        $number = (int) substr($digits, 0, 9);
         $control = (int) substr($digits, 9, 2);
         $sum = 0;
 
         for ($i = 0; $i < 9; $i++) {
             $sum += (int) $digits[$i] * (9 - $i);
+        }
+
+        // По правилам РФ контрольное число для номеров <= 001-001-998 не рассчитывается.
+        if ($number <= 1001998) {
+            return true;
         }
 
         $calculated = $sum < 100

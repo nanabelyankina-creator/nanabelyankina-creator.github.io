@@ -16,7 +16,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.analyses.store') }}" method="POST" class="clinic-form clinic-form--wide">
+    <form action="{{ route('admin.analyses.store') }}" method="POST" enctype="multipart/form-data" class="clinic-form clinic-form--wide">
         @csrf
 
         <div class="clinic-form-group">
@@ -55,8 +55,12 @@
         </div>
 
         <div class="clinic-form-group">
-            <label>Путь к файлу (file_path) — пока строка</label>
-            <input type="text" name="file_path" value="{{ old('file_path') }}">
+            <label>Файл анализа (опционально)</label>
+            <div class="clinic-file-field" data-file-field>
+                <div class="clinic-file-field__name" data-file-name>Выберите файл</div>
+                <input type="file" name="analysis_file" id="analysis-file" class="clinic-file-field__input" accept=".pdf,image/*">
+                <label for="analysis-file" class="clinic-btn clinic-btn--ghost clinic-file-field__btn">Выбрать файл</label>
+            </div>
         </div>
 
         <div class="clinic-form-group">
@@ -69,4 +73,31 @@
             <a href="{{ route('admin.analyses.index') }}" class="clinic-btn clinic-btn--ghost">Отмена</a>
         </div>
     </form>
+
+    @push('scripts')
+        <script>
+        (function() {
+            function truncateName(name, max) {
+                if (!name) return '';
+                if (name.length <= max) return name;
+                return name.slice(0, max - 1) + '…';
+            }
+
+            document.querySelectorAll('[data-file-field]').forEach(function(wrap) {
+                var input = wrap.querySelector('input[type="file"]');
+                var nameEl = wrap.querySelector('[data-file-name]');
+                if (!input || !nameEl) return;
+
+                function render() {
+                    var file = input.files && input.files[0] ? input.files[0] : null;
+                    nameEl.textContent = file ? truncateName(file.name, 15) : 'Выберите файл';
+                    nameEl.title = file ? file.name : '';
+                }
+
+                input.addEventListener('change', render);
+                render();
+            });
+        })();
+        </script>
+    @endpush
 @endsection

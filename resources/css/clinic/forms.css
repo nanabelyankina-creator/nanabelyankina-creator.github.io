@@ -72,6 +72,66 @@
   gap: 0.5rem;
 }
 
+.login-type-switch {
+  display: inline-flex;
+  gap: 0.5rem;
+  padding: 0.3rem;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.login-type-switch__item {
+  position: relative;
+  margin: 0;
+}
+
+.login-type-switch__item input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.login-type-switch__item span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 126px;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  color: #1f2937;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.login-type-switch__item.is-active span {
+  background: var(--clinic-primary);
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.28);
+}
+
+.login-type-switch__item:not(.is-active) span:hover {
+  background: #eaf2ff;
+}
+
+@media (max-width: 480px) {
+  .login-type-switch {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .login-type-switch__item {
+    flex: 1;
+  }
+
+  .login-type-switch__item span {
+    min-width: 0;
+    width: 100%;
+  }
+}
+
 .clinic-form-intro {
   color: var(--clinic-gray);
   margin-bottom: 1.5rem;

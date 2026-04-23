@@ -71,6 +71,45 @@
     box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
 }
 
+.clinic-admin-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 1rem;
+}
+
+.clinic-admin-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid #dbeafe;
+    background: #ffffff;
+    color: var(--clinic-primary);
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 600;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.clinic-admin-back:hover {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+
+.clinic-admin-back:active {
+    transform: translateY(1px);
+}
+
+.clinic-admin-back__icon {
+    display: block;
+}
+
+.clinic-admin-back__text {
+    line-height: 1;
+}
+
 .clinic-admin-header {
     display: flex;
     flex-wrap: wrap;
@@ -313,6 +352,41 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.clinic-file-field {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.65rem;
+    align-items: center;
+    padding: 0.55rem;
+    border-radius: 0.9rem;
+    border: 1px solid #bfdbfe;
+    background: #ffffff;
+}
+
+.clinic-file-field__name {
+    padding: 0.55rem 0.75rem;
+    border-radius: 0.75rem;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    color: #111827;
+    font-size: 0.95rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.clinic-file-field__input {
+    display: none;
+}
+
+.clinic-file-field__btn {
+    white-space: nowrap;
+}
+
+.clinic-file-link {
     margin-top: 0.5rem;
 }
 

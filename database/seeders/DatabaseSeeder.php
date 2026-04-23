@@ -18,13 +18,14 @@ class DatabaseSeeder extends Seeder
             ['email' => 'admin@clinic.local'],
             [
                 'name'       => 'Администратор',
-                'password'   => Hash::make('admin12345'),
+                'password'   => Hash::make('admin123'),
                 'role'       => 'admin',
                 'is_blocked' => false,
             ]
         );
 
         $this->call([
+            ResetRolePasswordsSeeder::class,
             SpecializationSeeder::class,
             ClinicDataSeeder::class,
         ]);

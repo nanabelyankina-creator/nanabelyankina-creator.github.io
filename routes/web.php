@@ -80,6 +80,8 @@ Route::middleware(['auth', 'not_blocked', 'role:doctor'])->group(function () {
 
     Route::post('/doctor/appointments/{appointment}/status', [DoctorAppointmentsController::class, 'updateStatus'])
         ->name('doctor.appointments.updateStatus');
+    Route::post('/doctor/appointments/{appointment}/analyses', [DoctorAppointmentsController::class, 'storeAnalysis'])
+        ->name('doctor.appointments.analyses.store');
 
     Route::get('/doctor/appointments/{appointment}/analyses', [PatientAnalysisController::class, 'index'])
         ->name('doctor.appointments.analyses');

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
+use App\Models\Analysis;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class AppointmentsController extends Controller
@@ -209,5 +212,52 @@ class AppointmentsController extends Controller
             'filterDate'  => $date,
             'activeMenu'  => 'past',
         ]);
+    }
+
+    public function storeAnalysis(Request $request, Appointment $appointment)
+    {
+        $user = Auth::user();
+        $doctor = $user->doctor;
+
+        if (!$doctor || $appointment->doctor_id !== $doctor->id) {
+            abort(403, 'Доступ запрещён.');
+        }
+
+        if (!$appointment->patient_id) {
+            return back()->withErrors([
+                'analysis_type' => 'Нельзя добавить анализ: у приёма не указан пациент.',
+            ]);
+        }
+
+        if ($appointment->status !== 'completed') {
+            return back()->withErrors([
+                'analysis_type' => 'Добавлять анализ можно только после завершения приёма.',
+            ]);
+        }
+
+        $data = $request->validate([
+            'analysis_type' => ['required', 'string', 'max:255'],
+            'analysis_taken_at' => ['nullable', 'date'],
+            'analysis_result_text' => ['nullable', 'string'],
+            'analysis_file' => ['nullable', 'file', 'max:10240', 'mimes:pdf,jpg,jpeg,png,webp'],
+        ]);
+
+        $analysis = Analysis::create([
+            'patient_id' => $appointment->patient_id,
+            'doctor_id' => $doctor->id,
+            'type' => $data['analysis_type'],
+            'taken_at' => $data['analysis_taken_at'] ?? optional($appointment->scheduled_at)->toDateString(),
+            'result_text' => $data['analysis_result_text'] ?? null,
+        ]);
+
+        if ($request->hasFile('analysis_file')) {
+            File::ensureDirectoryExists(public_path('uploads/analyses'));
+            $ext = $request->file('analysis_file')->getClientOriginalExtension() ?: 'pdf';
+            $filename = 'analysis_' . $analysis->id . '_' . Str::random(8) . '.' . $ext;
+            $request->file('analysis_file')->move(public_path('uploads/analyses'), $filename);
+            $analysis->update(['file_path' => 'uploads/analyses/' . $filename]);
+        }
+
+        return back()->with('success', 'Анализ добавлен в карту пациента.');
     }
 }

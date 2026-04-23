@@ -16,7 +16,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.analyses.update', $analysis) }}" method="POST" class="clinic-form clinic-form--wide">
+    <form action="{{ route('admin.analyses.update', $analysis) }}" method="POST" enctype="multipart/form-data" class="clinic-form clinic-form--wide">
         @csrf
         @method('PUT')
 
@@ -56,8 +56,24 @@
         </div>
 
         <div class="clinic-form-group">
-            <label>Путь к файлу (file_path)</label>
-            <input type="text" name="file_path" value="{{ old('file_path', $analysis->file_path) }}">
+            <label>Файл анализа (опционально)</label>
+            @php
+                $existingFile = $analysis->file_path ? basename($analysis->file_path) : null;
+                $existingLabel = $existingFile ? \Illuminate\Support\Str::limit($existingFile, 15, '…') : 'Выберите файл';
+            @endphp
+            <div class="clinic-file-field" data-file-field>
+                <div class="clinic-file-field__name" data-file-name title="{{ $existingFile ?? '' }}">{{ $existingLabel }}</div>
+                <input type="file" name="analysis_file" id="analysis-file" class="clinic-file-field__input" accept=".pdf,image/*">
+                <label for="analysis-file" class="clinic-btn clinic-btn--ghost clinic-file-field__btn">
+                    {{ $analysis->file_path ? 'Изменить файл' : 'Выбрать файл' }}
+                </label>
+            </div>
+
+            @if($analysis->file_path)
+                <div class="clinic-file-link">
+                    <a class="clinic-link" href="{{ asset($analysis->file_path) }}" target="_blank">Открыть текущий файл</a>
+                </div>
+            @endif
         </div>
 
         <div class="clinic-form-group">
@@ -70,4 +86,32 @@
             <a href="{{ route('admin.analyses.index') }}" class="clinic-btn clinic-btn--ghost">Отмена</a>
         </div>
     </form>
+
+    @push('scripts')
+        <script>
+        (function() {
+            function truncateName(name, max) {
+                if (!name) return '';
+                if (name.length <= max) return name;
+                return name.slice(0, max - 1) + '…';
+            }
+
+            document.querySelectorAll('[data-file-field]').forEach(function(wrap) {
+                var input = wrap.querySelector('input[type="file"]');
+                var nameEl = wrap.querySelector('[data-file-name]');
+                if (!input || !nameEl) return;
+
+                function render() {
+                    var file = input.files && input.files[0] ? input.files[0] : null;
+                    if (file) {
+                        nameEl.textContent = truncateName(file.name, 15);
+                        nameEl.title = file.name;
+                    }
+                }
+
+                input.addEventListener('change', render);
+            });
+        })();
+        </script>
+    @endpush
 @endsection

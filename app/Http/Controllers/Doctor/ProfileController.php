@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
@@ -36,24 +37,11 @@ class ProfileController extends Controller
             'last_name'   => ['required', 'string', 'max:255'],
             'first_name'  => ['required', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
+            'email'       => ['nullable', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'about'       => ['nullable', 'string'],
             'avatar'      => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'avatar_remove' => ['sometimes', 'boolean'],
         ]);
-
-        if ($request->hasFile('avatar')) {
-            if ($doctor->avatar_path) {
-                $oldPath = str_replace('storage/', '', $doctor->avatar_path);
-                Storage::disk('public')->delete($oldPath);
-            }
-            $path = $request->file('avatar')->store('avatars/doctors', 'public');
-            $data['avatar_path'] = 'storage/' . $path;
-        } elseif ($request->boolean('avatar_remove')) {
-            if ($doctor->avatar_path) {
-                $oldPath = str_replace('storage/', '', $doctor->avatar_path);
-                Storage::disk('public')->delete($oldPath);
-            }
-            $data['avatar_path'] = null;
-        }
 
         $updateData = [
             'last_name'   => $data['last_name'],
@@ -61,14 +49,36 @@ class ProfileController extends Controller
             'middle_name' => $data['middle_name'] ?? null,
             'about'       => $data['about'] ?? null,
         ];
-        if (isset($data['avatar_path'])) {
-            $updateData['avatar_path'] = $data['avatar_path'];
+
+        if ($request->hasFile('avatar')) {
+            if ($doctor->avatar_path && str_starts_with($doctor->avatar_path, 'uploads/')) {
+                @unlink(public_path($doctor->avatar_path));
+            }
+
+            File::ensureDirectoryExists(public_path('uploads/avatars/doctors'));
+
+            $ext = $request->file('avatar')->getClientOriginalExtension() ?: 'jpg';
+            $filename = 'doctor_' . $doctor->id . '_' . Str::random(8) . '.' . $ext;
+            $request->file('avatar')->move(public_path('uploads/avatars/doctors'), $filename);
+
+            $updateData['avatar_path'] = 'uploads/avatars/doctors/' . $filename;
+        } elseif ($request->boolean('avatar_remove')) {
+            if ($doctor->avatar_path && str_starts_with($doctor->avatar_path, 'uploads/')) {
+                @unlink(public_path($doctor->avatar_path));
+            }
+            $updateData['avatar_path'] = null;
         }
         $doctor->update($updateData);
 
-        $user->update([
+        $userUpdateData = [
             'name' => $data['first_name'].' '.$data['last_name'],
-        ]);
+        ];
+
+        if (array_key_exists('email', $data)) {
+            $userUpdateData['email'] = $data['email'];
+        }
+
+        $user->update($userUpdateData);
 
         return redirect()
             ->route('doctor.profile')

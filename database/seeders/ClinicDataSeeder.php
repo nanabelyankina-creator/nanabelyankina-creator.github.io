@@ -65,7 +65,7 @@ class ClinicDataSeeder extends Seeder
                     'phone'      => '+7900'.str_pad((string)$spec->id, 7, '0', STR_PAD_LEFT),
                     'role'       => 'doctor',
                     'is_blocked' => false,
-                    'password'   => Hash::make('Doctor123!'),
+                    'password'   => Hash::make('doctor123'),
                 ]
             );
 
@@ -158,17 +158,24 @@ class ClinicDataSeeder extends Seeder
                     'phone'      => '+7910'.str_pad((string)($index+1), 7, '0', STR_PAD_LEFT),
                     'role'       => 'patient',
                     'is_blocked' => false,
-                    'password'   => Hash::make('Client123!'),
+                    'password'   => Hash::make('patient123'),
                 ]
             );
 
-            $snils = str_pad((string)($index+1), 3, '0', STR_PAD_LEFT)
-                   .'-'
-                   .str_pad((string)($index+20), 3, '0', STR_PAD_LEFT)
-                   .'-'
-                   .str_pad((string)($index+300), 3, '0', STR_PAD_LEFT)
-                   .' '
-                   .str_pad((string)($index+10), 2, '0', STR_PAD_LEFT);
+            // Генерируем валидный СНИЛС (с корректной контрольной суммой).
+            $base9 = str_pad((string)($index + 1), 3, '0', STR_PAD_LEFT)
+                . str_pad((string)($index + 20), 3, '0', STR_PAD_LEFT)
+                . str_pad((string)($index + 300), 3, '0', STR_PAD_LEFT);
+
+            $sum = 0;
+            for ($i = 0; $i < 9; $i++) {
+                $sum += (int) $base9[$i] * (9 - $i);
+            }
+            $control = $sum < 100
+                ? $sum
+                : ($sum % 101 === 100 ? 0 : $sum % 101);
+
+            $snils = $base9 . str_pad((string) $control, 2, '0', STR_PAD_LEFT);
 
             // В БД храним СНИЛС как 11 цифр (без разделителей), чтобы вход работал стабильно.
             $snils = \App\Services\SnilsValidator::normalize($snils);

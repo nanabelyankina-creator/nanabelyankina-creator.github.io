@@ -21,6 +21,11 @@
     </aside>
 
     <section class="clinic-admin-content">
+        @if (!request()->routeIs('admin.dashboard'))
+            <div class="clinic-admin-topbar">
+                @include('admin.partials.back-button')
+            </div>
+        @endif
         @yield('admin-content')
     </section>
 </div>

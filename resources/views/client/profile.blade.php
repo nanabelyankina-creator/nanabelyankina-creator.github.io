@@ -8,22 +8,21 @@
         @php $avatarPath = $user->avatar_path ?? null; @endphp
         <div class="clinic-blue-card" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;margin-top:1rem;">
             <div style="display:flex;align-items:center;gap:1rem;">
-                <div class="clinic-avatar clinic-avatar--lg" style="width:110px;height:110px;">
-                    @if($avatarPath)
-                        <img
-                            class="clinic-img clinic-img--cover"
-                            src="{{ asset($avatarPath) }}"
-                            alt="Аватар пользователя"
-                            loading="lazy"
-                        >
-                    @else
-                        {{-- Дефолтная аватарка: круг + плечи --}}
-                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                            <circle cx="100" cy="100" r="95" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="6"/>
-                            <circle cx="100" cy="78" r="38" fill="#2563EB"/>
-                            <path d="M35 170c10-45 45-70 65-70s55 25 65 70" fill="#2563EB"/>
-                        </svg>
-                    @endif
+                <div class="clinic-avatar clinic-avatar--lg" style="width:110px;height:110px;" data-avatar-preview>
+                    <img
+                        id="avatar-preview-img"
+                        class="clinic-img clinic-img--cover"
+                        src="{{ $avatarPath ? asset($avatarPath) : '' }}"
+                        alt="Аватар пользователя"
+                        loading="lazy"
+                        style="{{ $avatarPath ? '' : 'display:none;' }}"
+                    >
+                    {{-- Дефолтная аватарка: круг + плечи --}}
+                    <svg id="avatar-preview-fallback" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="{{ $avatarPath ? 'display:none;' : '' }}">
+                        <circle cx="100" cy="100" r="95" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="6"/>
+                        <circle cx="100" cy="78" r="38" fill="#2563EB"/>
+                        <path d="M35 170c10-45 45-70 65-70s55 25 65 70" fill="#2563EB"/>
+                    </svg>
                 </div>
                 <div>
                     <div style="font-weight:800;margin-bottom:0.25rem;">Аватар</div>
@@ -34,7 +33,7 @@
             <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
                 <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" style="display:flex;gap:0.75rem;align-items:center;">
                     @csrf
-                    <input type="file" name="avatar" accept="image/*" id="avatar-file" style="display:none;">
+                    <input type="file" name="avatar" accept="image/*" id="avatar-file" style="display:none;" data-avatar-input>
                     <label for="avatar-file" class="clinic-btn clinic-btn--primary">Выберите файл</label>
                     <button type="submit" class="clinic-btn clinic-btn--primary">Сохранить</button>
                 </form>
@@ -159,7 +158,27 @@
                 @else
                     <ul class="profile-list">
                         @foreach($analysesPreview as $a)
-                            <li>{{ $a->type }} — {{ $a->taken_at?->format('d.m.Y') ?? 'н/д' }}</li>
+                            <li class="profile-analysis-row">
+                                @if($a->file_path)
+                                    <a class="profile-analysis-download" href="{{ asset($a->file_path) }}" download aria-label="Скачать файл анализа">
+                                        <svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
+                                            <circle cx="17" cy="17" r="17" fill="#2563EB"/>
+                                            <path d="M17 9v11" stroke="white" stroke-width="2.4" stroke-linecap="round"/>
+                                            <path d="M12.5 16.5L17 21l4.5-4.5" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M11 24h12" stroke="white" stroke-width="2.4" stroke-linecap="round"/>
+                                        </svg>
+                                    </a>
+                                @else
+                                    <span class="profile-analysis-download profile-analysis-download--empty" aria-hidden="true"></span>
+                                @endif
+
+                                <div class="profile-analysis-main">
+                                    <div><strong>{{ $a->type }}</strong></div>
+                                    <div class="clinic-text-muted" style="font-size:0.9rem;">
+                                        {{ $a->taken_at?->format('d.m.Y') ?? 'н/д' }}
+                                    </div>
+                                </div>
+                            </li>
                         @endforeach
                     </ul>
                 @endif
@@ -261,6 +280,34 @@
             });
         });
     });
+
+    // Предпросмотр аватара (только в браузере, без сохранения)
+    var avatarInput = document.querySelector('[data-avatar-input]');
+    var img = document.getElementById('avatar-preview-img');
+    var fallback = document.getElementById('avatar-preview-fallback');
+    var lastObjectUrl = null;
+
+    function setPreview(url) {
+        if (!img || !fallback) return;
+        if (url) {
+            img.src = url;
+            img.style.display = '';
+            fallback.style.display = 'none';
+        } else {
+            img.removeAttribute('src');
+            img.style.display = 'none';
+            fallback.style.display = '';
+        }
+    }
+
+    if (avatarInput) {
+        avatarInput.addEventListener('change', function() {
+            var file = this.files && this.files[0] ? this.files[0] : null;
+            if (lastObjectUrl) URL.revokeObjectURL(lastObjectUrl);
+            lastObjectUrl = file ? URL.createObjectURL(file) : null;
+            setPreview(lastObjectUrl);
+        });
+    }
 })();
 </script>
 @endpush

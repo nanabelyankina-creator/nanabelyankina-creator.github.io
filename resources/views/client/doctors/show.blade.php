@@ -3,9 +3,14 @@
 @section('content')
 <section class="clinic-page doctor-public-page">
     <div class="clinic-container">
-        <p class="doctor-back-link">
-            <a href="{{ route('doctors.index') }}">← Все врачи</a>
-        </p>
+        <div class="clinic-admin-topbar">
+            <a href="{{ route('doctors.index') }}" class="clinic-admin-back">
+                <svg class="clinic-admin-back__icon" width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    <path d="M12.5 4.5L7 10l5.5 5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="clinic-admin-back__text">Все врачи</span>
+            </a>
+        </div>
 
         <div class="doctor-public-layout">
             <div class="doctor-profile-header">
